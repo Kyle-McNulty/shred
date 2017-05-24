@@ -5,4 +5,5 @@
     android:name="com.google.android.gms.maps.SupportMapFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.kjmcnult.uw.edu.shredio.MapsActivity" />
+    tools:context="com.kjmcnult.uw.edu.shredio.MapsActivity"
+    map:cameraZoom="18"/>
