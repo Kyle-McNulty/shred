@@ -3,9 +3,15 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">@color/customRed</item>
+        <item name="colorPrimaryDark">@color/customRedDark</item>
+        <item name="colorAccent">@color/customOrange</item>
     </style>
 
+    <style name="LoginTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/customRed</item>
+        <item name="colorPrimaryDark">@color/customRedDark</item>
+        <item name="colorAccent">@color/customOrange</item>
+        <item name="android:windowBackground">@color/customRed</item>
+    </style>
 </resources>
