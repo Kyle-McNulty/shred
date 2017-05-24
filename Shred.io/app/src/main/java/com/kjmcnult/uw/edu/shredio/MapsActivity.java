@@ -24,7 +24,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 //                .findFragmentById(R.id.map);
 //        mapFragment.getMapAsync(this);
         FragmentManager fm = getSupportFragmentManager();
-        fm.beginTransaction().replace(R.id.map, DetailsFragment.newInstance("Terwilliger Rail"));
+        fm.beginTransaction().replace(R.id.map, CreateSpotFragment.newInstance("Terwilliger Rail")).addToBackStack(null).commit();
 
 
     }
