@@ -17,7 +17,7 @@
         <item name="android:editTextStyle">@style/LoginEditText</item>
     </style>
 
-    <style name="LoginEditText" parent="Theme.AppCompat.Light">
+    <style name="LoginEditText" parent="Widget.Design.TextInputLayout">
         <item name="colorControlActivated">@color/customBlue</item>
         <item name="colorControlHighlight">@color/customBlue</item>
     </style>

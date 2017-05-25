@@ -6,5 +6,4 @@
     <string name="login_text">Login</string>
     <string name="signup_text">Sign Up</string>
     <string name="password_repeat">Repeat Password</string>
-    <string name="field_textsize">22sp</string>
 </resources>

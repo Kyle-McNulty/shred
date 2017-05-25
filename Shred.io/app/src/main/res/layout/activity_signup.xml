@@ -22,61 +22,61 @@
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/signup_id_layout"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="7dp"
         app:errorEnabled="true"
         >
         <EditText
             android:id="@+id/signup_id"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:inputType="textEmailAddress"
             android:hint="@string/email_hint"
-            android:textSize="@string/field_textsize"
+            android:textSize="@dimen/field_textsize"
             />
 
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/signup_password_layout"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:errorEnabled="true"
         >
         <EditText
             android:id="@+id/signup_password"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:inputType="textPassword"
             android:hint="@string/password_hint"
-            android:textSize="@string/field_textsize"
+            android:textSize="@dimen/field_textsize"
             />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.design.widget.TextInputLayout
         android:id="@+id/signup_password_layout2"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:errorEnabled="true"
         >
         <EditText
             android:id="@+id/signup_password2"
-            android:layout_width="fill_parent"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:inputType="textPassword"
             android:hint="@string/password_repeat"
-            android:textSize="@string/field_textsize"
+            android:textSize="@dimen/field_textsize"
             />
     </android.support.design.widget.TextInputLayout>
 
     <android.support.v7.widget.AppCompatButton
         android:id="@+id/signup_signup_button"
         android:layout_height="wrap_content"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:background="@color/customRed"
         android:text="@string/signup_text"
         android:layout_marginTop="20dp"
