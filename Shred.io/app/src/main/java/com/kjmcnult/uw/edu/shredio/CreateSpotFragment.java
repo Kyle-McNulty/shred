@@ -6,14 +6,29 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.StorageTask;
+import com.google.firebase.storage.UploadTask;
+
+import java.io.ByteArrayOutputStream;
+
+import static android.R.attr.bitmap;
 import static android.R.attr.button;
 import static android.app.Activity.RESULT_OK;
 
@@ -27,6 +42,8 @@ public class CreateSpotFragment extends Fragment {
     private static final String NAME_PARAM_KEY = "name";
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static Uri mLocationForPhotos;
+    private DatabaseReference myRef;
+    private Bitmap bitmap;
 //    private static final String SUMMARY_PARAM_KEY = "summary";
 //    private static final String IMAGE_PARAM_KEY = "image";
 //    private static final String ARTICLE_PARAM_KEY = "article";
@@ -55,7 +72,7 @@ public class CreateSpotFragment extends Fragment {
 //        args.putString(IMAGE_PARAM_KEY, image);
 //        args.putString(ARTICLE_PARAM_KEY, urlString);
         fragment.setArguments(args);
-        mLocationForPhotos = Uri.parse("");
+        //mLocationForPhotos = Uri.parse("");
         return fragment;
     }
 
@@ -63,12 +80,18 @@ public class CreateSpotFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        View rootView = inflater.inflate(R.layout.create_spot_fragment, container, false);
+        FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
+        myRef = mDatabase.getReference();
+
+        final View rootView = inflater.inflate(R.layout.create_spot_fragment, container, false);
 
         Bundle bundle = this.getArguments();
 
+        Log.v("haHAA", "above bundle"); //gets here
+
         if(bundle != null) {
-            TextView name = (TextView) rootView.findViewById(R.id.new_spot_name);
+            Log.v("haHAA", "bundle"); //gets here
+            final TextView name = (TextView) rootView.findViewById(R.id.new_spot_name);
             name.setText(bundle.getString(NAME_PARAM_KEY));
 
             Button chooseImageButton = (Button) rootView.findViewById(R.id.new_spot_upload);
@@ -78,8 +101,10 @@ public class CreateSpotFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     // create an intent to take a picture
+                    Log.v("haHAA", "picture listener"); //doesn't get inside the listener, might be because it is in the maps activity
                     Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
+                        Log.v("haHAA", "picture");
                         startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                     }
                 }
@@ -94,6 +119,21 @@ public class CreateSpotFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     //add the spot information as a new database entry
+                    //store the image first, then set the image string as a location/identifier in order to retrieve it
+                    FirebaseStorage storage = FirebaseStorage.getInstance();
+                    StorageReference storageRef = storage.getReference();
+                    storageRef = storageRef.child("spots");
+                    storageRef = storageRef.child("spots/" + "firstSpot"); //change to use variable for name
+
+                    //uploads with the image currently stored in the instance variable
+                    if(bitmap != null)
+                        upload(storageRef);
+
+                    SkateSpot spot = new SkateSpot("firstSpot", ((EditText)rootView.findViewById(R.id.new_spot_description)).getText().toString(), "image", ((EditText)rootView.findViewById(R.id.new_spot_tags)).getText().toString());
+
+                    //child(spot.spotName).
+
+                    //myRef.child(spot.spotName).setValue(spot);
                 }
             });
 
@@ -117,12 +157,34 @@ public class CreateSpotFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap)extras.get("data");
+            bitmap = (Bitmap)extras.get("data");
+
             //ImageView imageView = (ImageView)findViewById(R.id.imgThumbnail);
             //imageView.setImageBitmap(imageBitmap);
 
             //store this photo with the item (instance variable?) so it can be added when the database entry is submitted
         }
+    }
+
+    public void upload(StorageReference storageRef){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+
+        UploadTask uploadTask = storageRef.putBytes(data);
+        StorageTask<UploadTask.TaskSnapshot> taskSnapshotStorageTask = uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
+                //Uri downloadUrl = taskSnapshot.getDownloadUrl();
+                Log.v("myTagHere", "success!");
+            }
+        });
     }
 
 
@@ -137,5 +199,38 @@ public class CreateSpotFragment extends Fragment {
 //            throw new ClassCastException(context.toString() + " must implement OnButtonSelectedListend");
 //        }
 //    }
+
+    public class SkateSpot{
+        public String spotName;
+        public String description;
+        public String imageResource;
+        public String tags;
+
+        public SkateSpot(){}
+
+        public SkateSpot(String spotName, String description, String imageResource, String tags){
+            this.spotName = spotName;
+            this.description = description;
+            this.imageResource = imageResource;
+            this.tags = tags;
+        }
+
+        public String getSpotName() {
+            return spotName;
+        }
+
+        public String getDescription() {
+            return description;
+        }
+
+        public String getImageResource() {
+            return imageResource;
+        }
+
+        public String getTags() {
+            return tags;
+        }
+    }
+
 
 }
