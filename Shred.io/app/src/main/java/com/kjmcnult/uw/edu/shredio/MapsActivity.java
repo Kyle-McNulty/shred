@@ -10,6 +10,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.FragmentActivity;
+import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
@@ -29,13 +32,14 @@ import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
+public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
     private GoogleMap mMap;
     private String TAG = "MapsActivity";
@@ -50,6 +54,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
         // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
+//                .findFragmentById(R.id.map);
+//        mapFragment.getMapAsync(this);
+
+
+
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -99,6 +109,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        mMap.setOnMarkerClickListener(this);
+
         //mMap.getUiSettings().setZoomControlsEnabled(true);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -107,8 +119,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onClick(View v) {
                 DatabaseReference myRef = database.getReference("spot");
                 //Bitmap bitmap = new
-                Spot spot = new Spot("Steven's Rail", currentLocation, "Sick Rail over hear at my apartment");
+                Spot spot = new Spot("Steven's Rail", currentLocation, "Sick Rail over here at my apartment");
+                //this should send the user to the create spot fragment
+                FragmentManager fm = getSupportFragmentManager();
+                fm.beginTransaction().replace(R.id.map, CreateSpotFragment.newInstance("rail")).addToBackStack(null).commit();
                 //Spot s = new Spot();
+                Log.v(TAG, currentLocation.toString());
                 mMap.addMarker(new MarkerOptions()
                     .title("Steven's Rail")
                     .snippet("Sick rail over here")
@@ -117,6 +133,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 myRef.setValue(spot);
             }
         });
+    }
+
+    @Override
+    public boolean onMarkerClick(final Marker marker) {
+        FragmentManager fm = getSupportFragmentManager();
+        //need to set this up so the fragment created is based off of the marker clicked
+        //potentially a for loop checking each value's latlng to see if it matches the marker's
+        fm.beginTransaction().replace(R.id.map, DetailsFragment.newInstance("Terwilliger Rail")).addToBackStack(null).commit();
+        return true;
     }
 
     @Override
@@ -221,4 +246,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //            return location;
 //        }
     }
+
+
 }
