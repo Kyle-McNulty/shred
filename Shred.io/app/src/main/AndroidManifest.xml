@@ -64,6 +64,10 @@
             android:name=".CreateSpotActivity"
             android:label="Add a new spot"
             >
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION_IMAGE_CAPTURE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
     </application>
 

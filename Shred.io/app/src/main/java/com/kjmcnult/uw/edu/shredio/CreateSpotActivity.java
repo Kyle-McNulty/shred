@@ -96,6 +96,9 @@ public class CreateSpotActivity extends AppCompatActivity {
         uploadButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //ask the user to take a picture before uploading, otherwise don't allow upload
+
+
                 //add the spot information as a new database entry
                 //store the image first, then set the image string as a location/identifier in order to retrieve it
                 FirebaseStorage storage = FirebaseStorage.getInstance();
@@ -136,6 +139,8 @@ public class CreateSpotActivity extends AppCompatActivity {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             Bundle extras = data.getExtras();
             bitmap = (Bitmap)extras.get("data");
+
+            //should probably display this photo as well to show a preview
 
             //ImageView imageView = (ImageView)findViewById(R.id.imgThumbnail);
             //imageView.setImageBitmap(imageBitmap);
