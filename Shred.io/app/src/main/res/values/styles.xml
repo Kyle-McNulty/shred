@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/customRed</item>
         <item name="colorPrimaryDark">@color/customBlue</item>
         <item name="colorAccent">@color/customYellow</item>
+        <item name="android:windowActionBarOverlay">true</item>
     </style>
 
 </resources>
