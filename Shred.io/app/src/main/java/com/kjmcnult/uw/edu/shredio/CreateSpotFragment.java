@@ -134,6 +134,8 @@ public class CreateSpotFragment extends Fragment {
                     //child(spot.spotName).
 
                     //myRef.child(spot.spotName).setValue(spot);
+
+                    //also need to add a marker to the map from here
                 }
             });
 
