@@ -54,6 +54,17 @@
             android:label="@string/title_activity_maps"
             >
         </activity>
+
+        <activity
+            android:name=".DetailsActivity"
+            android:label="Spot Details"
+            >
+        </activity>
+        <activity
+            android:name=".CreateSpotActivity"
+            android:label="Add a new spot"
+            >
+        </activity>
     </application>
 
 </manifest>

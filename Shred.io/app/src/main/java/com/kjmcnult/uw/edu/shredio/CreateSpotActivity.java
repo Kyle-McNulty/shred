@@ -7,7 +7,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,12 +33,13 @@ import java.io.ByteArrayOutputStream;
 import static android.R.attr.bitmap;
 import static android.R.attr.button;
 import static android.app.Activity.RESULT_OK;
+import static com.kjmcnult.uw.edu.shredio.R.id.container;
 
 /**
  * Created by kyle on 5/23/17.
  */
 
-public class CreateSpotFragment extends Fragment {
+public class CreateSpotActivity extends AppCompatActivity {
 
     private static final String TAG= "com.kjmcnult.uw.edu.shredio.CreateSpotFragment";
     private static final String NAME_PARAM_KEY = "name";
@@ -52,92 +55,67 @@ public class CreateSpotFragment extends Fragment {
 
     //private OnButtonSelectedListener callback; //context that we use for event callbacks
 
-//    //interface supported by anyone who can respond to this Fragment's clicks
-//    public interface OnButtonSelectedListener {
-//        void onButtonSelected(String urlString);
-//    }
 
-
-    public CreateSpotFragment() {
+    public CreateSpotActivity() {
         // Required empty public constructor
     }
 
-    //factory method for creating the Fragment
-    // other params , String summary, String image, String urlString
-    public static CreateSpotFragment newInstance(String name) {
-        CreateSpotFragment fragment = new CreateSpotFragment();
-        Bundle args = new Bundle();
-        args.putString(NAME_PARAM_KEY, name);
-//        args.putString(SUMMARY_PARAM_KEY, summary);
-//        args.putString(IMAGE_PARAM_KEY, image);
-//        args.putString(ARTICLE_PARAM_KEY, urlString);
-        fragment.setArguments(args);
-        //mLocationForPhotos = Uri.parse("");
-        return fragment;
-    }
+
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.create_spot_fragment);
 
         FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
         myRef = mDatabase.getReference();
 
-        final View rootView = inflater.inflate(R.layout.create_spot_fragment, container, false);
 
-        Bundle bundle = this.getArguments();
+        final TextView name = (TextView) findViewById(R.id.new_spot_name);
+        //name.setText(bundle.getString(NAME_PARAM_KEY));
 
-        Log.v("haHAA", "above bundle"); //gets here
+        Button chooseImageButton = (Button) findViewById(R.id.new_spot_upload);
+        //articleString = bundle.getString(ARTICLE_PARAM_KEY);
 
-        if(bundle != null) {
-            Log.v("haHAA", "bundle"); //gets here
-            final TextView name = (TextView) rootView.findViewById(R.id.new_spot_name);
-            name.setText(bundle.getString(NAME_PARAM_KEY));
-
-            Button chooseImageButton = (Button) rootView.findViewById(R.id.new_spot_upload);
-            //articleString = bundle.getString(ARTICLE_PARAM_KEY);
-
-            chooseImageButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // create an intent to take a picture
-                    Log.v("haHAA", "picture listener"); //doesn't get inside the listener, might be because it is in the maps activity
-                    Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
-                        Log.v("haHAA", "picture");
-                        startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
-                    }
+        chooseImageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // create an intent to take a picture
+                Log.v("haHAA", "picture listener"); //doesn't get inside the listener, might be because it is in the maps activity
+                Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+                    Log.v("haHAA", "picture");
+                    startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
                 }
-            });
+            }
+        });
 
+        Button uploadButton = (Button) findViewById(R.id.new_spot_upload);
+        //articleString = bundle.getString(ARTICLE_PARAM_KEY);
 
+        uploadButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //add the spot information as a new database entry
+                //store the image first, then set the image string as a location/identifier in order to retrieve it
+                FirebaseStorage storage = FirebaseStorage.getInstance();
+                StorageReference storageRef = storage.getReference();
+                storageRef = storageRef.child("spots");
+                storageRef = storageRef.child("spots/" + "firstSpot"); //change to use variable for name
 
-            Button uploadButton = (Button) rootView.findViewById(R.id.new_spot_upload);
-            //articleString = bundle.getString(ARTICLE_PARAM_KEY);
+                //uploads with the image currently stored in the instance variable
+                if(bitmap != null)
+                    upload(storageRef);
 
-            uploadButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //add the spot information as a new database entry
-                    //store the image first, then set the image string as a location/identifier in order to retrieve it
-                    FirebaseStorage storage = FirebaseStorage.getInstance();
-                    StorageReference storageRef = storage.getReference();
-                    storageRef = storageRef.child("spots");
-                    storageRef = storageRef.child("spots/" + "firstSpot"); //change to use variable for name
+                SkateSpot spot = new SkateSpot("firstSpot", ((EditText)findViewById(R.id.new_spot_description)).getText().toString(), "image", ((EditText)findViewById(R.id.new_spot_tags)).getText().toString());
 
-                    //uploads with the image currently stored in the instance variable
-                    if(bitmap != null)
-                        upload(storageRef);
+                //child(spot.spotName).
 
-                    SkateSpot spot = new SkateSpot("firstSpot", ((EditText)rootView.findViewById(R.id.new_spot_description)).getText().toString(), "image", ((EditText)rootView.findViewById(R.id.new_spot_tags)).getText().toString());
+                //myRef.child(spot.spotName).setValue(spot);
 
-                    //child(spot.spotName).
-
-                    //myRef.child(spot.spotName).setValue(spot);
-
-                    //also need to add a marker to the map from here
-                }
-            });
+                //also need to add a marker to the map from here
+            }
+        });
 
 
             //articleImage = (ImageView) rootView.findViewById(R.id.previewImage);
@@ -151,8 +129,6 @@ public class CreateSpotFragment extends Fragment {
 //            }
         }
 
-        return rootView;
-    }
 
 
     @Override

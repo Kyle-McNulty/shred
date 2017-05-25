@@ -11,6 +11,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
@@ -32,6 +33,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -89,19 +91,45 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // PULL UP THE DETAIL FRAG
                 // pass the name, date, description, image
-                DetailsFragment detailsFragment = DetailsFragment.newInstance(testSpot.name);
+                //DetailsFragment detailsFragment = DetailsFragment.newInstance(testSpot.name);
 
-                getSupportFragmentManager().beginTransaction()
-                        .replace(R.id.dragView, detailsFragment, "DetailsFragment")
-                        .addToBackStack(null)
-                        .commit();
+//                getSupportFragmentManager().beginTransaction()
+//                        .replace(R.id.dragView, detailsFragment, "DetailsFragment")
+//                        .addToBackStack(null)
+//                        .commit();
+                startActivity(new Intent(MapsActivity.this, DetailsActivity.class));
             }
         });
 
         adapter.add(testSpot);
         adapter.add(testSpot);
 
+        //initialize
+        //initializeMap();
+
     }
+
+//    private void initializeMap() {
+//
+//        mMapFragment = SupportMapFragment.newInstance();
+//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+//        fragmentTransaction.add(R.id.fragment_container, mMapFragment, "map");
+//        fragmentTransaction.commit();
+//
+//        handler.post(new Runnable() {
+//            @Override
+//            public void run() {
+//                mMap = mMapFragment.getMap();
+//
+//                mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
+//                    @Override
+//                    public void onCameraChange(CameraPosition cameraPosition) {
+//                        // Do something here
+//                    }
+//                });
+//            }
+//        });
+//    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -151,16 +179,23 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 //Bitmap bitmap = new
                 Spot spot = new Spot("Steven's Rail", currentLocation, "Sick Rail over here at my apartment");
                 //this should send the user to the create spot fragment
-                FragmentManager fm = getSupportFragmentManager();
-                fm.beginTransaction().replace(R.id.map, CreateSpotFragment.newInstance("rail")).addToBackStack(null).commit();
+//                FragmentManager fm = getSupportFragmentManager();
+//                fm.beginTransaction().replace(R.id.container, CreateSpotFragment.newInstance("rail")).addToBackStack(null).commit();
+                Intent newSpotIntent = new Intent(MapsActivity.this, CreateSpotActivity.class);
+                startActivity(newSpotIntent);
+                // the marker should be created after the user submits it, and the location should be when the user first clicks new
+
+
                 //Spot s = new Spot();
-                Log.v(TAG, currentLocation.toString());
-                mMap.addMarker(new MarkerOptions()
-                    .title("Steven's Rail")
-                    .snippet("Sick rail over here")
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
-                    .position(currentLocation));
-                myRef.setValue(spot);
+                if(currentLocation != null) {
+                    Log.v(TAG, currentLocation.toString());
+                    mMap.addMarker(new MarkerOptions()
+                            .title("Steven's Rail")
+                            .snippet("Sick rail over here")
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
+                            .position(currentLocation));
+                    myRef.setValue(spot);
+                }
             }
         });
     }
@@ -170,7 +205,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         FragmentManager fm = getSupportFragmentManager();
         //need to set this up so the fragment created is based off of the marker clicked
         //potentially a for loop checking each value's latlng to see if it matches the marker's
-        fm.beginTransaction().replace(R.id.map, DetailsFragment.newInstance("Terwilliger Rail")).addToBackStack(null).commit();
+        //fm.beginTransaction().replace(R.id.mainLayout, DetailsFragment.newInstance("Terwilliger Rail")).addToBackStack(null).commit();
+        startActivity(new Intent(MapsActivity.this, DetailsActivity.class));
         return true;
     }
 
