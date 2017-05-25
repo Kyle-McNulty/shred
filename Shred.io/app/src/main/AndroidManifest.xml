@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.kjmcnult.uw.edu.shredio">
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.kjmcnult.uw.edu.shredio"
+    >
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
@@ -30,13 +32,27 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".MapsActivity"
-            android:label="@string/title_activity_maps">
+            android:name=".LoginActivity"
+            android:theme="@style/LoginTheme"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity android:name=".SignUpActivity"
+            android:theme="@style/LoginTheme"
+            android:parentActivityName=".LoginActivity"
+            >
+
+        </activity>
+
+        <activity
+            android:name=".MapsActivity"
+            android:label="@string/title_activity_maps"
+            android:parentActivityName=".LoginActivity"
+            >
         </activity>
     </application>
 
