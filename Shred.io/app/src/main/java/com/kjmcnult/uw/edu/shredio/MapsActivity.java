@@ -58,8 +58,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //                .findFragmentById(R.id.map);
 //        mapFragment.getMapAsync(this);
 
-
-
         // MAP STUFF
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);

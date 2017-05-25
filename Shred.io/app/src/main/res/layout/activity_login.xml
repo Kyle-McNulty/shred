@@ -63,7 +63,6 @@
         android:layout_width="match_parent"
         android:background="@color/customRed"
         android:text="@string/login_text"
-        android:onClick="login"
         />
 
     <android.support.v7.widget.AppCompatButton
