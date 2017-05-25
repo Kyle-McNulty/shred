@@ -9,4 +9,6 @@
     <color name="customOrange">#ff9b71</color>
     <color name="customRed">#e84855</color>
     <color name="customRedDark">#CC2233</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorWhite">#FFFFFF</color>
 </resources>
