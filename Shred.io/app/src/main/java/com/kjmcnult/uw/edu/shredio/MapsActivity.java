@@ -10,8 +10,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -21,6 +19,9 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -35,7 +36,6 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -60,6 +60,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
 
+        // MAP STUFF
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
@@ -71,6 +72,37 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .build();
 
         database = FirebaseDatabase.getInstance();
+
+        // LIST STUFF
+//        ArrayList<Spot> testlist = new ArrayList<>();
+//        testlist.add();
+        LatLng loc = new LatLng(47.6553, 122.3035);
+        final Spot testSpot = new Spot("name1", loc, "desc");
+
+        ArrayAdapter<Spot> adapter = new ArrayAdapter<Spot>(
+                this,
+                R.layout.list_item,
+                R.id.txtItem );
+
+        ListView lv = (ListView)findViewById(R.id.list);
+        lv.setAdapter(adapter);
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                // PULL UP THE DETAIL FRAG
+                // pass the name, date, description, image
+                DetailsFragment detailsFragment = DetailsFragment.newInstance(testSpot.name);
+
+                getSupportFragmentManager().beginTransaction()
+                        .replace(R.id.dragView, detailsFragment, "DetailsFragment")
+                        .addToBackStack(null)
+                        .commit();
+            }
+        });
+
+        adapter.add(testSpot);
+        adapter.add(testSpot);
+
     }
 
     @Override
@@ -228,6 +260,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         public Spot(String name, LatLng location) {
             this.name = name;
             this.location = location;
+        }
+
+        public String toString() {
+            return name + "\n" + location.toString() + "\n" + description;
         }
 
 //        public String getName() {

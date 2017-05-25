@@ -4,6 +4,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/customRed</item>
+        <item name="android:windowActionBarOverlay">true</item>
         <item name="colorPrimaryDark">@color/customRedDark</item>
         <item name="colorAccent">@color/customOrange</item>
     </style>
