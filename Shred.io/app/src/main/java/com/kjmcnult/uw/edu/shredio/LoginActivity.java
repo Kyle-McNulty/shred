@@ -1,12 +1,15 @@
 package com.kjmcnult.uw.edu.shredio;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,34 +27,38 @@ public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
     private FirebaseAuth mAuth;
 
+    private EditText emailEdit;
+    private EditText passwordEdit;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
-
         this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-
+        setContentView(R.layout.activity_login);
         mAuth = FirebaseAuth.getInstance();
 
+        emailEdit = (EditText) findViewById(R.id.login_id);
+        passwordEdit = (EditText) findViewById(R.id.login_password);
 
+        emailEdit.addTextChangedListener(new CustomTextWatcher(this, emailEdit,  R.id.login_id_layout));
+        passwordEdit.addTextChangedListener(new CustomTextWatcher(this, passwordEdit, R.id.login_password_layout));
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
+        Authentication.updateUI(this, currentUser);
     }
 
-    private void updateUI(FirebaseUser currentUser) {
+    public void signUp(View v) {
+        startActivity(new Intent(this, SignUpActivity.class));
     }
 
-    private void signIn() {
-        TextView emailView = (TextView) findViewById(R.id.login_id);
-        TextView passwordView = (TextView) findViewById(R.id.login_password);
+    public void login(View v) {
 
-        String email = emailView.toString();
-        String password = passwordView.toString();
+        String email = emailEdit.getText().toString().trim();
+        String password = passwordEdit.getText().toString().trim();
 
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -61,16 +68,14 @@ public class LoginActivity extends AppCompatActivity {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "signInWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                            Authentication.updateUI(LoginActivity.this, user);
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
                             Toast.makeText(LoginActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
-                            updateUI(null);
+                            Authentication.updateUI(LoginActivity.this, null);
                         }
-
-                        // ...
                     }
                 });
     }

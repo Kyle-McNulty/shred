@@ -11,7 +11,13 @@
     <style name="LoginTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/customRed</item>
         <item name="colorPrimaryDark">@color/customRedDark</item>
-        <item name="colorAccent">@color/customOrange</item>
+        <item name="colorAccent">@color/customBlue</item>
         <item name="android:windowBackground">@color/customRed</item>
+        <item name="android:editTextStyle">@style/LoginEditText</item>
+    </style>
+
+    <style name="LoginEditText" parent="Theme.AppCompat.Light">
+        <item name="colorControlActivated">@color/customBlue</item>
+        <item name="colorControlHighlight">@color/customBlue</item>
     </style>
 </resources>
