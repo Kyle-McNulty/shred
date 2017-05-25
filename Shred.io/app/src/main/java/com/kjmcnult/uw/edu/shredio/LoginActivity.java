@@ -6,9 +6,11 @@ import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.AppCompatButton;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +44,22 @@ public class LoginActivity extends AppCompatActivity {
 
         emailEdit.addTextChangedListener(new CustomTextWatcher(this, emailEdit,  R.id.login_id_layout));
         passwordEdit.addTextChangedListener(new CustomTextWatcher(this, passwordEdit, R.id.login_password_layout));
+
+        Button loginButton = (Button) findViewById(R.id.login_login_button);
+        loginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                login(v);
+            }
+        });
+
+        AppCompatButton signUpButton = (AppCompatButton) findViewById(R.id.login_signup_button);
+        signUpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signUp(v);
+            }
+        });
     }
 
     @Override
@@ -80,3 +98,19 @@ public class LoginActivity extends AppCompatActivity {
                 });
     }
 }
+
+/*
+Error description received from server: {
+                                                        "error": {
+                                                         "errors": [
+                                                          {
+                                                           "domain": "global",
+                                                           "reason": "invalid",
+                                                           "message": "EMAIL_NOT_FOUND"
+                                                          }
+                                                         ],
+                                                         "code": 400,
+                                                         "message": "EMAIL_NOT_FOUND"
+                                                        }
+                                                       }
+ */
