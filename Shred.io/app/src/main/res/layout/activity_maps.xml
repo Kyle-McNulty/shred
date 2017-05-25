@@ -1,14 +1,15 @@
-<com.sothree.slidinguppanel.SlidingUpPanelLayout
-    android:id="@+id/map_activity"
+<com.sothree.slidinguppanel.SlidingUpPanelLayout android:id="@+id/map_activity"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     android:layout_width="match_parent"
     android:gravity="bottom"
-    >
+    sothree:umanoScrollableView="@+id/list"
+    xmlns:sothree="http://schemas.android.com/tools">
 
     <!-- MAIN CONTENT -->
     <FrameLayout
+        android:id="@+id/mainLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
@@ -40,13 +41,14 @@
 
     <!-- SLIDING LAYOUT -->
     <LinearLayout
+        android:id="@+id/dragView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#ffffff"
         android:orientation="vertical"
         android:clickable="true"
         android:focusable="false"
-        android:id="@+id/dragView">
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -58,19 +60,9 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textSize="14sp"
+                android:textSize="16sp"
                 android:gravity="center_vertical"
-                android:text="beyb"
-                android:paddingLeft="10dp"/>
-
-            <Button
-                android:id="@+id/follow"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:textSize="14sp"
-                android:gravity="center_vertical|right"
-                android:paddingRight="10dp"
-                android:text="up up"
+                android:text="See a list of all spots"
                 android:paddingLeft="10dp"/>
 
         </LinearLayout>
