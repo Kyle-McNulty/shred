@@ -4,8 +4,8 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/customRed</item>
-        <item name="colorPrimaryDark">@color/customRedDark</item>
-        <item name="colorAccent">@color/customOrange</item>
+        <item name="colorPrimaryDark">@color/customBlue</item>
+        <item name="colorAccent">@color/customYellow</item>
     </style>
 
     <style name="LoginTheme" parent="Theme.AppCompat.NoActionBar">
