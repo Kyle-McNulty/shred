@@ -71,10 +71,14 @@ public class CreateSpotActivity extends AppCompatActivity {
         myRef = mDatabase.getReference();
 
 
-        final TextView name = (TextView) findViewById(R.id.new_spot_name);
+        final EditText nameText = (EditText) findViewById(R.id.new_spot_name);
         //name.setText(bundle.getString(NAME_PARAM_KEY));
 
-        Button chooseImageButton = (Button) findViewById(R.id.new_spot_upload);
+        final EditText descriptionText = (EditText)findViewById(R.id.new_spot_description);
+        final EditText tagsText = (EditText)findViewById(R.id.new_spot_tags);
+
+
+        Button chooseImageButton = (Button) findViewById(R.id.select_image);
         //articleString = bundle.getString(ARTICLE_PARAM_KEY);
 
         chooseImageButton.setOnClickListener(new View.OnClickListener() {
@@ -97,26 +101,41 @@ public class CreateSpotActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //ask the user to take a picture before uploading, otherwise don't allow upload
-
+                String name = nameText.getText().toString();
 
                 //add the spot information as a new database entry
                 //store the image first, then set the image string as a location/identifier in order to retrieve it
                 FirebaseStorage storage = FirebaseStorage.getInstance();
                 StorageReference storageRef = storage.getReference();
-                storageRef = storageRef.child("spots");
-                storageRef = storageRef.child("spots/" + "firstSpot"); //change to use variable for name
+                //storageRef = storageRef.child("spots");
+                storageRef = storageRef.child("spots/" + name); //change to use variable for name
 
                 //uploads with the image currently stored in the instance variable
                 if(bitmap != null)
                     upload(storageRef);
 
-                SkateSpot spot = new SkateSpot("firstSpot", ((EditText)findViewById(R.id.new_spot_description)).getText().toString(), "image", ((EditText)findViewById(R.id.new_spot_tags)).getText().toString());
+
+                String description = descriptionText.getText().toString();
+                String tags = tagsText.getText().toString();
+
+                SkateSpot spot = new SkateSpot(name, description, "spots/" + name, tags);
+
+                //clear the edit text fields
+                nameText.setText("");
+                descriptionText.setText("");
+                tagsText.setText("");
 
                 //child(spot.spotName).
 
-                //myRef.child(spot.spotName).setValue(spot);
+                myRef.child(name).setValue(spot);
+
+
 
                 //also need to add a marker to the map from here
+                //this should send back to the maps activity
+
+                Intent intent = new Intent(CreateSpotActivity.this, MapsActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -183,7 +202,7 @@ public class CreateSpotActivity extends AppCompatActivity {
 //        }
 //    }
 
-    public class SkateSpot{
+    public static class SkateSpot{
         public String spotName;
         public String description;
         public String imageResource;
