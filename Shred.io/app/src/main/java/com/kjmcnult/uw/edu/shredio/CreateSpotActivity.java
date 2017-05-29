@@ -3,6 +3,7 @@ package com.kjmcnult.uw.edu.shredio;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -19,6 +20,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DatabaseReference;
@@ -39,7 +44,7 @@ import static com.kjmcnult.uw.edu.shredio.R.id.container;
  * Created by kyle on 5/23/17.
  */
 
-public class CreateSpotActivity extends AppCompatActivity {
+public class CreateSpotActivity extends AppCompatActivity implements com.google.android.gms.location.LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG= "com.kjmcnult.uw.edu.shredio.CreateSpotFragment";
     private static final String NAME_PARAM_KEY = "name";
@@ -47,6 +52,8 @@ public class CreateSpotActivity extends AppCompatActivity {
     private static Uri mLocationForPhotos;
     private DatabaseReference myRef;
     private Bitmap bitmap;
+    private LatLng currentLocation;
+    private GoogleApiClient mGoogleApiClient;
 //    private static final String SUMMARY_PARAM_KEY = "summary";
 //    private static final String IMAGE_PARAM_KEY = "image";
 //    private static final String ARTICLE_PARAM_KEY = "article";
@@ -61,6 +68,17 @@ public class CreateSpotActivity extends AppCompatActivity {
     }
 
 
+    @Override
+    protected void onStart() {
+        mGoogleApiClient.connect();
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        mGoogleApiClient.disconnect();
+        super.onStop();
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -70,6 +88,15 @@ public class CreateSpotActivity extends AppCompatActivity {
         FirebaseDatabase mDatabase = FirebaseDatabase.getInstance();
         myRef = mDatabase.getReference();
 
+        this.currentLocation = null;
+
+        if (mGoogleApiClient == null) {
+            mGoogleApiClient = new GoogleApiClient.Builder(this)
+                    .addConnectionCallbacks(this)
+                    .addOnConnectionFailedListener(this)
+                    .addApi(LocationServices.API)
+                    .build();
+        }
 
         final EditText nameText = (EditText) findViewById(R.id.new_spot_name);
         //name.setText(bundle.getString(NAME_PARAM_KEY));
@@ -118,7 +145,7 @@ public class CreateSpotActivity extends AppCompatActivity {
                 String description = descriptionText.getText().toString();
                 String tags = tagsText.getText().toString();
 
-                SkateSpot spot = new SkateSpot(name, description, "spots/" + name, tags);
+                SkateSpot spot = new SkateSpot(name, description, "spots/" + name, tags, currentLocation);
 
                 //clear the edit text fields
                 nameText.setText("");
@@ -189,6 +216,28 @@ public class CreateSpotActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    public void onLocationChanged(Location location) {
+        this.currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+    }
+
+    @Override
+    public void onConnected(@Nullable Bundle bundle) {
+        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+        if (mLastLocation != null) {
+            this.currentLocation = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+        }
+    }
+
+    @Override
+    public void onConnectionSuspended(int i) {
+
+    }
+
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+
+    }
 
 
 //    @Override
@@ -207,14 +256,16 @@ public class CreateSpotActivity extends AppCompatActivity {
         public String description;
         public String imageResource;
         public String tags;
+        public LatLng location;
 
         public SkateSpot(){}
 
-        public SkateSpot(String spotName, String description, String imageResource, String tags){
+        public SkateSpot(String spotName, String description, String imageResource, String tags, LatLng location){
             this.spotName = spotName;
             this.description = description;
             this.imageResource = imageResource;
             this.tags = tags;
+            this.location = location;
         }
 
         public String getSpotName() {
@@ -232,6 +283,8 @@ public class CreateSpotActivity extends AppCompatActivity {
         public String getTags() {
             return tags;
         }
+
+        public LatLng getLocation() { return location; }
     }
 
 

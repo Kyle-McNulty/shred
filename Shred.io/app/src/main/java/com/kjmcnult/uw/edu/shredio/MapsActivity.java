@@ -38,8 +38,15 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
@@ -101,6 +108,37 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
+        DatabaseReference ref = database.getReference();
+        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.v(TAG,"SNAPSHOT: " + dataSnapshot.toString());
+                Iterable<DataSnapshot> itr = dataSnapshot.getChildren();
+                for (DataSnapshot obj : itr) {
+                    //Spot spot = (Spot) obj;
+                    //Log.v(TAG, obj.getValue() + " <---");
+                    Object object = obj.getValue();
+                    //Log.v(TAG, object.getClass() + "<---");
+                    HashMap<String, Object> hashMap = (HashMap<String, Object>) object;
+                    Log.v(TAG, hashMap.keySet().toString());
+                    if (hashMap.keySet().contains("location")) {
+                        HashMap<String, Double> location = (HashMap<String, Double>) hashMap.get("location");
+                        LatLng latLng = new LatLng(location.get("latitude"), location.get("longitude"));
+                        mMap.addMarker(new MarkerOptions()
+                                .title(obj.getKey())
+                                .snippet(hashMap.get("description").toString())
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
+                                .position(latLng));
+                    }
+                }
+                //dataSnapshot.getChildren()
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         adapter.add(testSpot);
         adapter.add(testSpot);
 
@@ -130,6 +168,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //            }
 //        });
 //    }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -300,9 +339,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             return name + "\n" + location.toString() + "\n" + description;
         }
 
-//        public String getName() {
-//            return  this.name;
-//        }
+        public String getName() {
+            return  this.name;
+        }
 //
 //        public String getDescription() {
 //            return  this.description;
