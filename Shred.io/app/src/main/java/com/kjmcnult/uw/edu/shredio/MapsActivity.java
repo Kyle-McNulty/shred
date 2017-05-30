@@ -3,7 +3,6 @@ package com.kjmcnult.uw.edu.shredio;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -117,13 +116,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     //Log.v(TAG, object.getClass() + "<---");
                     HashMap<String, Object> hashMap = (HashMap<String, Object>) object;
                     Log.v(TAG, hashMap.keySet().toString());
-                    if (hashMap.keySet().contains("location")) {
+                    if (hashMap.keySet().contains("location") && hashMap.keySet().contains("spotName")) {
                         HashMap<String, Double> location = (HashMap<String, Double>) hashMap.get("location");
                         LatLng latLng = new LatLng(location.get("latitude"), location.get("longitude"));
                         Spot spot = new Spot();
-                        spot.name = hashMap.get("spotName").toString();
-                        spot.description = hashMap.get("description").toString();
-                        spot.location = latLng;
+                        spot.setName(hashMap.get("spotName").toString());
+                        spot.setDescription(hashMap.get("description").toString());
+                        spot.setLocation(latLng);
                         adapter.add(spot);
                         mMap.addMarker(new MarkerOptions()
                                 .title(obj.getKey())
@@ -309,53 +308,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return super.onCreateView(name, context, attrs);
     }
 
-    public static class Spot {
 
-        public String name;
-        public String description;
-        public Bitmap picture;
-        public LatLng location;
-
-        private Spot() {}
-
-        public Spot(String name, LatLng location, String description, Bitmap picture) {
-            this.name = name;
-            this.location = location;
-            this.description = description;
-            this.picture = picture;
-        }
-
-        public Spot(String name, LatLng location, String description) {
-            this.name = name;
-            this.location = location;
-            this.description = description;
-        }
-
-        public Spot(String name, LatLng location) {
-            this.name = name;
-            this.location = location;
-        }
-
-        public String toString() {
-            return name + "\n" + location.toString() + "\n" + description;
-        }
-
-        public String getName() {
-            return  this.name;
-        }
-//
-//        public String getDescription() {
-//            return  this.description;
-//        }
-//
-//        public Bitmap getPicture() {
-//            return  this.picture;
-//        }
-//
-//        public LatLng getLocation() {
-//            return location;
-//        }
-    }
 
 
 }
