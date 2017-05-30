@@ -173,6 +173,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            menu.getItem(R.id.menu_item_account).setEnabled(true);
+            menu.getItem(R.id.menu_item_signout).setEnabled(false);
+        } else {
+            menu.getItem(R.id.menu_item_account).setEnabled(false);
+            menu.getItem(R.id.menu_item_signout).setEnabled(true);
+        }
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
         invalidateOptionsMenu();
@@ -201,7 +208,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             case R.id.menu_item_account:
                 Intent intent_login = new Intent(MapsActivity.this, LoginActivity.class);
                 startActivity(intent_login);
-                invalidateOptionsMenu();
             case R.id.menu_item_signout:
                 FirebaseAuth.getInstance().signOut();
                 invalidateOptionsMenu();
