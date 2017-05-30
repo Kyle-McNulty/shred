@@ -12,7 +12,10 @@ import com.google.firebase.auth.FirebaseUser;
 public class Authentication {
     public static void updateUI(AppCompatActivity activity, FirebaseUser currentUser) {
         if (currentUser != null) {
-            activity.startActivity(new Intent(activity.getApplicationContext(), MapsActivity.class));
+            Intent intent = new Intent(activity.getApplicationContext(), MapsActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            activity.startActivity(intent);
         }
     }
 }
