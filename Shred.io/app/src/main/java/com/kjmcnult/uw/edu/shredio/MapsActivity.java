@@ -245,7 +245,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //need to set this up so the fragment created is based off of the marker clicked
         //potentially a for loop checking each value's latlng to see if it matches the marker's
         //fm.beginTransaction().replace(R.id.mainLayout, DetailsFragment.newInstance("Terwilliger Rail")).addToBackStack(null).commit();
-        startActivity(new Intent(MapsActivity.this, DetailsActivity.class));
+        Intent mIntent = new Intent(MapsActivity.this, DetailsActivity.class);
+        Bundle mBundle = new Bundle();
+        mBundle.putString("location", marker.getPosition().toString());
+        mIntent.putExtras(mBundle);
+        Log.v(TAG, marker.getPosition().toString());
+        //extras.putString();
+        startActivity(mIntent);
         return true;
     }
 
