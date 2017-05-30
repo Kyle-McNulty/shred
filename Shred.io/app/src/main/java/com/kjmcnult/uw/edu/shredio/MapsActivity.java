@@ -11,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
@@ -33,7 +32,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -44,9 +42,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
@@ -86,7 +82,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         LatLng loc = new LatLng(47.6553, 122.3035);
         final Spot testSpot = new Spot("name1", loc, "desc");
 
-        ArrayAdapter<Spot> adapter = new ArrayAdapter<Spot>(
+        final ArrayAdapter<Spot> adapter = new ArrayAdapter<Spot>(
                 this,
                 R.layout.list_item,
                 R.id.txtItem );
@@ -124,6 +120,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     if (hashMap.keySet().contains("location")) {
                         HashMap<String, Double> location = (HashMap<String, Double>) hashMap.get("location");
                         LatLng latLng = new LatLng(location.get("latitude"), location.get("longitude"));
+                        Spot spot = new Spot();
+                        spot.name = hashMap.get("spotName").toString();
+                        spot.description = hashMap.get("description").toString();
+                        spot.location = latLng;
+                        adapter.add(spot);
                         mMap.addMarker(new MarkerOptions()
                                 .title(obj.getKey())
                                 .snippet(hashMap.get("description").toString())
@@ -139,8 +140,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             }
         });
-        adapter.add(testSpot);
-        adapter.add(testSpot);
+        //adapter.add(testSpot);
+        //adapter.add(testSpot);
 
         //initialize
         //initializeMap();
@@ -216,7 +217,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onClick(View v) {
                 DatabaseReference myRef = database.getReference("spot");
                 //Bitmap bitmap = new
-                Spot spot = new Spot("Steven's Rail", currentLocation, "Sick Rail over here at my apartment");
+                //Spot spot = new Spot("Steven's Rail", currentLocation, "Sick Rail over here at my apartment");
                 //this should send the user to the create spot fragment
 //                FragmentManager fm = getSupportFragmentManager();
 //                fm.beginTransaction().replace(R.id.container, CreateSpotFragment.newInstance("rail")).addToBackStack(null).commit();
@@ -226,15 +227,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
                 //Spot s = new Spot();
-                if(currentLocation != null) {
-                    Log.v(TAG, currentLocation.toString());
-                    mMap.addMarker(new MarkerOptions()
-                            .title("Steven's Rail")
-                            .snippet("Sick rail over here")
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
-                            .position(currentLocation));
-                    myRef.setValue(spot);
-                }
+//                if(currentLocation != null) {
+//                    Log.v(TAG, currentLocation.toString());
+//                    mMap.addMarker(new MarkerOptions()
+//                            .title("Steven's Rail")
+//                            .snippet("Sick rail over here")
+//                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
+//                            .position(currentLocation));
+//                    myRef.setValue(spot);
+//                }
             }
         });
     }
