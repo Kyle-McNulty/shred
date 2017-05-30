@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
@@ -172,21 +173,50 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            menu.getItem(R.id.menu_item_account).setEnabled(true);
+            menu.getItem(R.id.menu_item_signout).setEnabled(false);
+        } else {
+            menu.getItem(R.id.menu_item_account).setEnabled(false);
+            menu.getItem(R.id.menu_item_signout).setEnabled(true);
+        }
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
+        invalidateOptionsMenu();
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            menu.findItem(R.id.menu_item_account).setEnabled(true);
+            menu.findItem(R.id.menu_item_account).setVisible(true);
+            menu.findItem(R.id.menu_item_signout).setEnabled(false);
+            menu.findItem(R.id.menu_item_signout).setVisible(false);
+        } else {
+            menu.findItem(R.id.menu_item_account).setEnabled(false);
+            menu.findItem(R.id.menu_item_account).setVisible(false);
+            menu.findItem(R.id.menu_item_signout).setEnabled(true);
+            menu.findItem(R.id.menu_item_signout).setVisible(true);
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_item_account:
+                Intent intent_login = new Intent(MapsActivity.this, LoginActivity.class);
+                startActivity(intent_login);
             case R.id.menu_item_signout:
                 FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(MapsActivity.this, LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
+                invalidateOptionsMenu();
+                Snackbar.make(findViewById(R.id.map_activity), "You just signed out!", Snackbar.LENGTH_SHORT).show();
+//                Intent intent_signout = new Intent(MapsActivity.this, LoginActivity.class);
+//                intent_signout.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                intent_signout.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                startActivity(intent_signout);
+//                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -283,8 +313,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     protected void onStart() {
+        Log.v(TAG, "Starting");
+        invalidateOptionsMenu();
         googleApiClient.connect();
         super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.v(TAG, "Resuming");
+        invalidateOptionsMenu();
     }
 
     @Override
