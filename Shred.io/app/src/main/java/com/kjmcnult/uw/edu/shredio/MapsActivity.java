@@ -128,7 +128,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         mMap.addMarker(new MarkerOptions()
                                 .title(obj.getKey())
                                 .snippet(hashMap.get("description").toString())
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_filled_smaller))
                                 .position(latLng));
                     }
                 }

@@ -12,7 +12,7 @@
 
     <item android:id="@+id/menu_item_signout"
         android:title="Sign Out"
-        android:icon="@drawable/ic_signout"
+        android:icon="@drawable/ic_signout_custom"
         app:showAsAction="always"
         />
 </menu>
