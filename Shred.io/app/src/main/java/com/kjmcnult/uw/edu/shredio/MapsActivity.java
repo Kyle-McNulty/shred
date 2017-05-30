@@ -181,16 +181,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             menu.findItem(R.id.menu_item_account).setEnabled(true);
             menu.findItem(R.id.menu_item_account).setVisible(true);
             menu.findItem(R.id.menu_item_signout).setEnabled(false);
             menu.findItem(R.id.menu_item_signout).setVisible(false);
+            fab.hide();
         } else {
             menu.findItem(R.id.menu_item_account).setEnabled(false);
             menu.findItem(R.id.menu_item_account).setVisible(false);
             menu.findItem(R.id.menu_item_signout).setEnabled(true);
             menu.findItem(R.id.menu_item_signout).setVisible(true);
+            fab.show();
         }
         return super.onPrepareOptionsMenu(menu);
     }
