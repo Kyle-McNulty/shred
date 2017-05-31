@@ -87,7 +87,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         // LIST STUFF
 //        ArrayList<Spot> testlist = new ArrayList<>();
 //        testlist.add();
-        LatLng loc = new LatLng(47.6553, 122.3035);
+        final LatLng loc = new LatLng(47.6553, 122.3035);
         final Spot testSpot = new Spot("name1", loc, "desc");
 
 //        final ArrayAdapter<Spot> adapter = new ArrayAdapter<Spot>(
@@ -110,7 +110,20 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //                        .replace(R.id.dragView, detailsFragment, "DetailsFragment")
 //                        .addToBackStack(null)
 //                        .commit();
-                startActivity(new Intent(MapsActivity.this, DetailsActivity.class));
+                Intent mIntent = new Intent(MapsActivity.this, DetailsActivity.class);
+                Bundle mBundle = new Bundle();
+                TextView locationView = (TextView) view.findViewById(R.id.spotLocation);
+                String locationString = locationView.getText().toString().substring(10);
+                locationString = locationString.substring(0, locationString.length() - 1);
+                String[] locations = locationString.split(",");
+                Log.v(TAG, "spotLocation: " + Double.parseDouble(locations[0]) + ", " + locations[1]);
+                LatLng location = new LatLng(Double.parseDouble(locations[0]), Double.parseDouble(locations[1]));
+                mBundle.putString("location", location.toString());
+                mIntent.putExtras(mBundle);
+                Log.v(TAG, location.toString());
+                //extras.putString();
+                startActivity(mIntent);
+                //startActivity(new Intent(MapsActivity.this, DetailsActivity.class));
             }
         });
 
