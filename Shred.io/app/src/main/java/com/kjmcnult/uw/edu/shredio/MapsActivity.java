@@ -3,6 +3,7 @@ package com.kjmcnult.uw.edu.shredio;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,13 +16,19 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.DragEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -42,6 +49,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
@@ -82,13 +90,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         LatLng loc = new LatLng(47.6553, 122.3035);
         final Spot testSpot = new Spot("name1", loc, "desc");
 
-        final ArrayAdapter<Spot> adapter = new ArrayAdapter<Spot>(
-                this,
-                R.layout.list_item,
-                R.id.txtItem );
-
+//        final ArrayAdapter<Spot> adapter = new ArrayAdapter<Spot>(
+//                this,
+//                R.layout.list_item,
+//                R.id.txtItem );
+        ArrayList<Spot> spotArrayList = new ArrayList<>();
+        final SpotsAdapter spotsAdapter = new SpotsAdapter(this, spotArrayList);
         ListView lv = (ListView)findViewById(R.id.list);
-        lv.setAdapter(adapter);
+        //lv.setAdapter(adapter);
+        lv.setAdapter(spotsAdapter);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -124,7 +134,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                         spot.setName(hashMap.get("spotName").toString());
                         spot.setDescription(hashMap.get("description").toString());
                         spot.setLocation(latLng);
-                        adapter.add(spot);
+                        //adapter.add(spot);
+                        spotsAdapter.add(spot);
                         mMap.addMarker(new MarkerOptions()
                                 .title(obj.getKey())
                                 .snippet(hashMap.get("description").toString())
@@ -132,7 +143,46 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 .position(latLng));
                     }
                 }
-                //dataSnapshot.getChildren()
+                View dragView = findViewById(R.id.dragView);
+//                dragView.setOnDragListener(new View.OnDragListener() {
+//                    @Override
+//                    public boolean onDrag(View v, DragEvent event) {
+//                        Log.v(TAG, event.toString());
+//                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+//                            ImageView listIcon = (ImageView) findViewById(R.id.list_icon);
+//                            Drawable icon = null;
+//                            if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
+//                                Log.v(TAG, "SET ICON TO DOWN ARROW");
+//                                icon = (Drawable) getDrawable(R.drawable.ic_list_away);
+//                            } else if ((event.getAction() == DragEvent.ACTION_DRAG_EXITED)) {
+//                                Log.v(TAG, "SET ICON TO UP ARROW");
+//                                icon = (Drawable) getDrawable(R.drawable.ic_list_drag);
+//                            }
+//                            listIcon.setImageDrawable(icon);
+//                            return true;
+//                        }
+//                        return false;
+//                    }
+//                });
+                // onclicklistener for changing of listview icon
+//                final ImageView listIcon = (ImageView) findViewById(R.id.list_icon);
+//                listIcon.setOnClickListener(new View.OnClickListener() {
+//
+//                    private Boolean listShown = false;
+//                    @Override
+//                    public void onClick(View v) {
+//                        this.listShown = !this.listShown;
+//                        Drawable icon = null;
+//                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+//                            if (listShown) {
+//                                icon = (Drawable) getDrawable(R.drawable.ic_list_drag);
+//                            } else {
+//                                icon = (Drawable) getDrawable(R.drawable.ic_list_away);
+//                            }
+//                        }
+//                        listIcon.setImageDrawable(icon);
+//                    }
+//                });
             }
 
             @Override
@@ -224,8 +274,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
      * This callback is triggered when the map is ready to be used.
      * This is where we can add markers or lines, add listeners or move the camera. In this case,
      * we just add a marker near Sydney, Australia.
-     * If Google Play services is not installed on the device, the user will be prompted to install
-     * it inside the SupportMapFragment. This method will only be triggered once the user has
+     * If Google Play services is not installed on the device, the Spot will be prompted to install
+     * it inside the SupportMapFragment. This method will only be triggered once the Spot has
      * installed Google Play services and returned to the app.
      */
     @Override
@@ -243,12 +293,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 DatabaseReference myRef = database.getReference("spot");
                 //Bitmap bitmap = new
                 //Spot spot = new Spot("Steven's Rail", currentLocation, "Sick Rail over here at my apartment");
-                //this should send the user to the create spot fragment
+                //this should send the Spot to the create spot fragment
 //                FragmentManager fm = getSupportFragmentManager();
 //                fm.beginTransaction().replace(R.id.container, CreateSpotFragment.newInstance("rail")).addToBackStack(null).commit();
                 Intent newSpotIntent = new Intent(MapsActivity.this, CreateSpotActivity.class);
                 startActivity(newSpotIntent);
-                // the marker should be created after the user submits it, and the location should be when the user first clicks new
+                // the marker should be created after the Spot submits it, and the location should be when the Spot first clicks new
 
 
                 //Spot s = new Spot();
@@ -349,7 +399,31 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return super.onCreateView(name, context, attrs);
     }
 
+    public class SpotsAdapter extends ArrayAdapter<Spot> {
+        public SpotsAdapter(Context context, ArrayList<Spot> spots) {
+            super(context, 0, spots);
+        }
 
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            // Get the data item for this position
+            Spot spot = getItem(position);
+            // Check if an existing view is being reused, otherwise inflate the view
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
+            }
+            // Lookup view for data population
+            TextView spotTitle = (TextView) convertView.findViewById(R.id.spotTitle);
+            TextView spotDescription = (TextView) convertView.findViewById(R.id.spotDescription);
+            TextView spotLocation = (TextView) convertView.findViewById(R.id.spotLocation);
+            // Populate the data into the template view using the data object
+            spotTitle.setText(spot.getName());
+            spotDescription.setText(spot.getDescription());
+            spotLocation.setText(spot.getLocation().toString());
+            // Return the completed view to render on screen
+            return convertView;
+        }
+    }
 
 
 }
