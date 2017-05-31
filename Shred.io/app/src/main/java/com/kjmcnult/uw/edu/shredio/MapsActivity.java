@@ -3,6 +3,7 @@ package com.kjmcnult.uw.edu.shredio;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -15,14 +16,17 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -139,7 +143,46 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                                 .position(latLng));
                     }
                 }
-                //dataSnapshot.getChildren()
+                View dragView = findViewById(R.id.dragView);
+//                dragView.setOnDragListener(new View.OnDragListener() {
+//                    @Override
+//                    public boolean onDrag(View v, DragEvent event) {
+//                        Log.v(TAG, event.toString());
+//                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+//                            ImageView listIcon = (ImageView) findViewById(R.id.list_icon);
+//                            Drawable icon = null;
+//                            if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
+//                                Log.v(TAG, "SET ICON TO DOWN ARROW");
+//                                icon = (Drawable) getDrawable(R.drawable.ic_list_away);
+//                            } else if ((event.getAction() == DragEvent.ACTION_DRAG_EXITED)) {
+//                                Log.v(TAG, "SET ICON TO UP ARROW");
+//                                icon = (Drawable) getDrawable(R.drawable.ic_list_drag);
+//                            }
+//                            listIcon.setImageDrawable(icon);
+//                            return true;
+//                        }
+//                        return false;
+//                    }
+//                });
+                // onclicklistener for changing of listview icon
+//                final ImageView listIcon = (ImageView) findViewById(R.id.list_icon);
+//                listIcon.setOnClickListener(new View.OnClickListener() {
+//
+//                    private Boolean listShown = false;
+//                    @Override
+//                    public void onClick(View v) {
+//                        this.listShown = !this.listShown;
+//                        Drawable icon = null;
+//                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+//                            if (listShown) {
+//                                icon = (Drawable) getDrawable(R.drawable.ic_list_drag);
+//                            } else {
+//                                icon = (Drawable) getDrawable(R.drawable.ic_list_away);
+//                            }
+//                        }
+//                        listIcon.setImageDrawable(icon);
+//                    }
+//                });
             }
 
             @Override
