@@ -3,6 +3,7 @@ package com.kjmcnult.uw.edu.shredio;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
@@ -37,14 +38,16 @@ import java.io.ByteArrayOutputStream;
 
 import static android.R.attr.bitmap;
 import static android.R.attr.button;
+import static android.R.attr.id;
 import static android.app.Activity.RESULT_OK;
+import static com.kjmcnult.uw.edu.shredio.R.id.button4;
 import static com.kjmcnult.uw.edu.shredio.R.id.container;
 
 /**
  * Created by kyle on 5/23/17.
  */
 
-public class CreateSpotActivity extends AppCompatActivity implements com.google.android.gms.location.LocationListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
+public class CreateSpotActivity extends AppCompatActivity implements com.google.android.gms.location.LocationListener, View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG= "com.kjmcnult.uw.edu.shredio.CreateSpotFragment";
     private static final String NAME_PARAM_KEY = "name";
@@ -54,6 +57,8 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
     private Bitmap bitmap;
     private LatLng currentLocation;
     private GoogleApiClient mGoogleApiClient;
+    private int[] ids;
+    private boolean[] idBools;
 //    private static final String SUMMARY_PARAM_KEY = "summary";
 //    private static final String IMAGE_PARAM_KEY = "image";
 //    private static final String ARTICLE_PARAM_KEY = "article";
@@ -97,6 +102,50 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
                     .addApi(LocationServices.API)
                     .build();
         }
+
+        //set listeners for the buttons to shade when selected
+//        ViewGroup group = (ViewGroup)findViewById(R.id.create_id);
+//        View v;
+//        for(int i = 0; i < group.getChildCount(); i++) {
+//            v = group.getChildAt(i);
+//            if(v instanceof Button) v.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    Log.v("hahAA", "button pressed");
+//                    v.setBackgroundColor(Color.YELLOW);
+//                }
+//            });
+//        }
+
+        ids = new int[5];
+        idBools = new boolean[5];
+        for(boolean bool : idBools){
+            bool = false;
+        }
+
+        Button button1 = (Button) findViewById(R.id.button1);
+        button1.setOnClickListener(this);
+        ids[0] = button1.getId();
+
+        Button button2 = (Button) findViewById(R.id.button2);
+        button2.setOnClickListener(this);
+        ids[1] = button2.getId();
+
+        Button button3 = (Button) findViewById(R.id.button3);
+        button3.setOnClickListener(this);
+        ids[2] = button3.getId();
+
+        Button button4 = (Button) findViewById(R.id.button4);
+        button4.setOnClickListener(this);
+        ids[3] = button4.getId();
+
+        Button button5 = (Button) findViewById(R.id.button5);
+        button5.setOnClickListener(this);
+        ids[4] = button5.getId();
+
+
+
+
 
         final EditText nameText = (EditText) findViewById(R.id.new_spot_name);
         //name.setText(bundle.getString(NAME_PARAM_KEY));
@@ -165,18 +214,7 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
                 startActivity(intent);
             }
         });
-
-
-            //articleImage = (ImageView) rootView.findViewById(R.id.previewImage);
-            //String imageString = bundle.getString(IMAGE_PARAM_KEY);
-            //Log.v(TAG, imageString);
-            // if imagestring is blank/null, set the image to a default resource loaded with the app, else use the image loader
-//            if(imageString.equals("")){
-//                articleImage.setImageResource(R.drawable.no_image);
-//            } else {
-//                fetchArticlePoster(bundle.getString(IMAGE_PARAM_KEY));
-//            }
-        }
+    }
 
 
 
@@ -239,6 +277,26 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
 
     }
 
+    @Override
+    public void onClick(View v) {
+        Log.v("hahAA", "button pressed");
+        int vId = v.getId();
+        for(int id = 0; id < ids.length; id++){
+            if(ids[id] == vId){
+                //set the boolean for the specific id to opposite
+                if(idBools[id]){
+                    //if button has already been pressed, chane background color back to normal
+                    v.setBackgroundColor(Color.GRAY);
+                } else {
+                    //change color to show selected
+                    v.setBackgroundColor(Color.YELLOW);
+                }
+                idBools[id] = !idBools[id];
+            }
+        }
+
+    }
+
 
 //    @Override
 //    public void onAttach(Context context) {
@@ -286,6 +344,5 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
 
         public LatLng getLocation() { return location; }
     }
-
 
 }

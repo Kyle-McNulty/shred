@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout android:id="@+id/create_id" xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -20,6 +20,42 @@
         android:hint="Enter Tags Here"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
+    <TextView
+        android:text="Select any tags that apply!"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/button1"
+            android:text="Rail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/button2"
+            android:text="Stairs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/button3"
+            android:text="Ledge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/button4"
+            android:text="Gap"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/button5"
+            android:text="Ramp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/select_image"
