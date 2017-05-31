@@ -3,15 +3,14 @@ package com.kjmcnult.uw.edu.shredio;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
@@ -33,7 +32,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
@@ -44,9 +42,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
@@ -86,7 +82,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         LatLng loc = new LatLng(47.6553, 122.3035);
         final Spot testSpot = new Spot("name1", loc, "desc");
 
-        ArrayAdapter<Spot> adapter = new ArrayAdapter<Spot>(
+        final ArrayAdapter<Spot> adapter = new ArrayAdapter<Spot>(
                 this,
                 R.layout.list_item,
                 R.id.txtItem );
@@ -121,13 +117,18 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     //Log.v(TAG, object.getClass() + "<---");
                     HashMap<String, Object> hashMap = (HashMap<String, Object>) object;
                     Log.v(TAG, hashMap.keySet().toString());
-                    if (hashMap.keySet().contains("location")) {
+                    if (hashMap.keySet().contains("location") && hashMap.keySet().contains("spotName")) {
                         HashMap<String, Double> location = (HashMap<String, Double>) hashMap.get("location");
                         LatLng latLng = new LatLng(location.get("latitude"), location.get("longitude"));
+                        Spot spot = new Spot();
+                        spot.setName(hashMap.get("spotName").toString());
+                        spot.setDescription(hashMap.get("description").toString());
+                        spot.setLocation(latLng);
+                        adapter.add(spot);
                         mMap.addMarker(new MarkerOptions()
                                 .title(obj.getKey())
                                 .snippet(hashMap.get("description").toString())
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_filled_smaller))
                                 .position(latLng));
                     }
                 }
@@ -139,8 +140,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             }
         });
-        adapter.add(testSpot);
-        adapter.add(testSpot);
+        //adapter.add(testSpot);
+        //adapter.add(testSpot);
 
         //initialize
         //initializeMap();
@@ -174,19 +175,44 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
+        invalidateOptionsMenu();
         return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            menu.findItem(R.id.menu_item_account).setEnabled(true);
+            menu.findItem(R.id.menu_item_account).setVisible(true);
+            menu.findItem(R.id.menu_item_signout).setEnabled(false);
+            menu.findItem(R.id.menu_item_signout).setVisible(false);
+            fab.hide();
+        } else {
+            menu.findItem(R.id.menu_item_account).setEnabled(false);
+            menu.findItem(R.id.menu_item_account).setVisible(false);
+            menu.findItem(R.id.menu_item_signout).setEnabled(true);
+            menu.findItem(R.id.menu_item_signout).setVisible(true);
+            fab.show();
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
+            case R.id.menu_item_account:
+                Intent intent_login = new Intent(MapsActivity.this, LoginActivity.class);
+                startActivity(intent_login);
             case R.id.menu_item_signout:
                 FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(MapsActivity.this, LoginActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                startActivity(intent);
-                finish();
+                invalidateOptionsMenu();
+                Snackbar.make(findViewById(R.id.map_activity), "You just signed out!", Snackbar.LENGTH_SHORT).show();
+//                Intent intent_signout = new Intent(MapsActivity.this, LoginActivity.class);
+//                intent_signout.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                intent_signout.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                startActivity(intent_signout);
+//                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -216,7 +242,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onClick(View v) {
                 DatabaseReference myRef = database.getReference("spot");
                 //Bitmap bitmap = new
-                Spot spot = new Spot("Steven's Rail", currentLocation, "Sick Rail over here at my apartment");
+                //Spot spot = new Spot("Steven's Rail", currentLocation, "Sick Rail over here at my apartment");
                 //this should send the user to the create spot fragment
 //                FragmentManager fm = getSupportFragmentManager();
 //                fm.beginTransaction().replace(R.id.container, CreateSpotFragment.newInstance("rail")).addToBackStack(null).commit();
@@ -226,15 +252,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
 
                 //Spot s = new Spot();
-                if(currentLocation != null) {
-                    Log.v(TAG, currentLocation.toString());
-                    mMap.addMarker(new MarkerOptions()
-                            .title("Steven's Rail")
-                            .snippet("Sick rail over here")
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
-                            .position(currentLocation));
-                    myRef.setValue(spot);
-                }
+//                if(currentLocation != null) {
+//                    Log.v(TAG, currentLocation.toString());
+//                    mMap.addMarker(new MarkerOptions()
+//                            .title("Steven's Rail")
+//                            .snippet("Sick rail over here")
+//                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
+//                            .position(currentLocation));
+//                    myRef.setValue(spot);
+//                }
             }
         });
     }
@@ -289,8 +315,17 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     protected void onStart() {
+        Log.v(TAG, "Starting");
+        invalidateOptionsMenu();
         googleApiClient.connect();
         super.onStart();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Log.v(TAG, "Resuming");
+        invalidateOptionsMenu();
     }
 
     @Override
@@ -314,53 +349,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return super.onCreateView(name, context, attrs);
     }
 
-    public static class Spot {
 
-        public String name;
-        public String description;
-        public Bitmap picture;
-        public LatLng location;
-
-        private Spot() {}
-
-        public Spot(String name, LatLng location, String description, Bitmap picture) {
-            this.name = name;
-            this.location = location;
-            this.description = description;
-            this.picture = picture;
-        }
-
-        public Spot(String name, LatLng location, String description) {
-            this.name = name;
-            this.location = location;
-            this.description = description;
-        }
-
-        public Spot(String name, LatLng location) {
-            this.name = name;
-            this.location = location;
-        }
-
-        public String toString() {
-            return name + "\n" + location.toString() + "\n" + description;
-        }
-
-        public String getName() {
-            return  this.name;
-        }
-//
-//        public String getDescription() {
-//            return  this.description;
-//        }
-//
-//        public Bitmap getPicture() {
-//            return  this.picture;
-//        }
-//
-//        public LatLng getLocation() {
-//            return location;
-//        }
-    }
 
 
 }
