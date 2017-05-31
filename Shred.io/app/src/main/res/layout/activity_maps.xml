@@ -65,6 +65,7 @@
                     android:layout_weight="1"
                     android:textSize="16sp"
                     android:gravity="center_vertical"
+                    android:textColor="@color/customBlue"
                     android:text="See a list of all spots"
                     android:paddingLeft="10dp"/>
 
