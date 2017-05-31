@@ -1,9 +1,12 @@
 package com.kjmcnult.uw.edu.shredio;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.PersistableBundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -21,6 +24,8 @@ import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -31,9 +36,12 @@ import com.google.firebase.storage.StorageReference;
 
 import org.w3c.dom.Text;
 
+import java.sql.Ref;
 import java.util.HashMap;
 
+import static android.R.attr.bitmap;
 import static android.R.attr.button;
+import static android.R.attr.description;
 import static java.security.AccessController.getContext;
 
 /**
@@ -45,6 +53,7 @@ public class DetailsActivity extends AppCompatActivity{
     private static final String TAG= "DetailsActivity";
     private static final String NAME_PARAM_KEY = "name";
     private String markerLocation;
+    private ImageView image;
 //    private static final String SUMMARY_PARAM_KEY = "summary";
 //    private static final String IMAGE_PARAM_KEY = "image";
 //    private static final String ARTICLE_PARAM_KEY = "article";
@@ -68,6 +77,7 @@ public class DetailsActivity extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.details_fragment);
 
+        image = (ImageView) findViewById(R.id.spot_image);
 
         markerLocation = getIntent().getExtras().getString("location");
 
@@ -92,6 +102,7 @@ public class DetailsActivity extends AppCompatActivity{
                         String stringLocation = latLng.toString();
                         if(markerLocation.equals(stringLocation)){
                             //set the appropriate fields for this database point
+                            Log.v(TAG, hashMap.get("spotName").toString());
                             TextView name = (TextView) findViewById(R.id.spot_name);
                             name.setText(hashMap.get("spotName").toString());
 
@@ -101,7 +112,7 @@ public class DetailsActivity extends AppCompatActivity{
                             TextView tags = (TextView) findViewById(R.id.spot_tags);
                             tags.setText(hashMap.get("tags").toString());
 
-                            ImageView image = (ImageView) findViewById(R.id.spot_image);
+
                             //get the image from storage
                             FirebaseStorage storage = FirebaseStorage.getInstance();
                             StorageReference storageRef = storage.getReference();
@@ -109,10 +120,9 @@ public class DetailsActivity extends AppCompatActivity{
                             Log.v(TAG, hashMap.get("spotName").toString());
                             storageRef = storageRef.child("spots/" + hashMap.get("spotName").toString());
 
-                            Glide.with(getApplicationContext())
-                                    .using(new FirebaseImageLoader())
-                                    .load(storageRef)
-                                    .into(image);
+                            download(storageRef);
+
+
                             Log.v(TAG, "gets to end");
                         }
                     }
@@ -139,8 +149,31 @@ public class DetailsActivity extends AppCompatActivity{
                 String latlng = ""; //get this value from a parameter
                 Intent maps = new Intent(android.content.Intent.ACTION_VIEW,
                         //the uri should use the latlng we have in this fragmnet
-                        Uri.parse("http://maps.google.com/maps?daddr=20.5666,45.345"));
+                        Uri.parse("http://maps.google.com/maps?daddr=" + markerLocation.substring(10, markerLocation.length() - 1)));
                 startActivity(maps);
+            }
+        });
+    }
+
+    public void download(StorageReference ref){
+        Log.v(TAG, "ref: " + ref.toString());
+//        Glide.with(this)
+//                .using(new FirebaseImageLoader())
+//                .load(ref)
+//                .dontAnimate()
+//                .into(image);
+        final long ONE_MEGABYTE = 1024 * 1024;
+        ref.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                // Data for "images/island.jpg" is returns, use this as needed
+                Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                image.setImageBitmap(bitmap);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle any errors
             }
         });
     }
