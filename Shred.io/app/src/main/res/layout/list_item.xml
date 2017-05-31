@@ -5,30 +5,22 @@
     android:layout_width="match_parent"
     android:padding="10dp"
     >
-    <TextView
-        android:id="@+id/txtItem"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="12sp"
-        android:minHeight="?android:attr/listPreferredItemHeight"
-        android:gravity="center_vertical"/>
+
     <TextView
         android:id="@+id/spotTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="24sp"
         android:textColor="@color/customRed"
-        android:minHeight="?android:attr/listPreferredItemHeight"
-        android:gravity="center_vertical"
-        android:layout_below="@+id/txtItem"/>
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
     <TextView
         android:id="@+id/spotDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="12sp"
         android:textColor="@color/customBlue"
-        android:minHeight="?android:attr/listPreferredItemHeight"
-        android:gravity="center_vertical"
         android:layout_below="@+id/spotTitle"/>
     <TextView
         android:id="@+id/spotLocation"
@@ -36,8 +28,6 @@
         android:layout_height="wrap_content"
         android:textSize="12sp"
         android:textColor="@color/customBlue"
-        android:minHeight="?android:attr/listPreferredItemHeight"
-        android:gravity="center_vertical"
         android:layout_below="@+id/spotDescription"/>
 </RelativeLayout>
 

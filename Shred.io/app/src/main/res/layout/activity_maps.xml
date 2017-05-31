@@ -63,10 +63,10 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:textSize="16sp"
+                    android:textSize="24sp"
                     android:gravity="center_vertical"
                     android:textColor="@color/customBlue"
-                    android:text="See a list of all spots"
+                    android:text="All spots"
                     android:paddingLeft="10dp"/>
 
             </LinearLayout>
