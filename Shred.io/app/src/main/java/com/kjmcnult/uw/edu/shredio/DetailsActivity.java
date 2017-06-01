@@ -97,18 +97,21 @@ public class DetailsActivity extends AppCompatActivity{
                         RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar);
                         ratingBar.setRating((float)averageRating);
 
-                        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-                            @Override
-                            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                                HashMap<String, Double> userRatings = skatespot.getUserRatings();
-                                userRatings.put(user.getEmail().replace(".", ""), (double) rating);
-                                averageRating = getRating(userRatings);
-                                ratingBar.setRating((float) averageRating);
-                                skatespot.setUserRatings(userRatings);
-                                ref.child(markerKey).setValue(skatespot);
-                                Toast.makeText(getApplicationContext(), "You submitted a rating!", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                        // check if the user has already left a rating
+                        if (!skatespot.getUserRatings().keySet().contains(user.getEmail())) {
+                            ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                                @Override
+                                public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                                    HashMap<String, Double> userRatings = skatespot.getUserRatings();
+                                    userRatings.put(user.getEmail().replace(".", ""), (double) rating);
+                                    averageRating = getRating(userRatings);
+                                    ratingBar.setRating((float) averageRating);
+                                    skatespot.setUserRatings(userRatings);
+                                    ref.child(markerKey).setValue(skatespot);
+                                    Toast.makeText(getApplicationContext(), "You submitted a rating!", Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
 
 
                         TextView name = (TextView) findViewById(R.id.spot_name);
