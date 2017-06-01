@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -36,6 +37,7 @@ import java.util.List;
 import static android.R.attr.name;
 import static android.R.attr.rating;
 import static com.kjmcnult.uw.edu.shredio.R.id.ratingBar;
+import static com.kjmcnult.uw.edu.shredio.SkateSpot.getRating;
 
 /**
  * Details about a specific spot displayed when the spot is clicked on
@@ -90,24 +92,24 @@ public class DetailsActivity extends AppCompatActivity{
                         // Log.v(TAG, "Skatespot: " + snap.toString());
                         final SkateSpot skatespot = snap.getValue(SkateSpot.class);
 
-                        averageRating = skatespot.getRating();
+                        averageRating = getRating(skatespot.getUserRatings());
+                        Log.v(TAG, skatespot.getUserRatings().toString());
                         RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar);
                         ratingBar.setRating((float)averageRating);
 
-                        // check if the user has already left a rating
-                        if (!skatespot.getUserRatings().keySet().contains(user.getEmail())) {
-                            ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-                                @Override
-                                public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                                    HashMap<String, Double> userRatings = skatespot.getUserRatings();
-                                    userRatings.put(user.getEmail().replace(".", ""), (double) rating);
-                                    averageRating = skatespot.getRating();
-                                    ratingBar.setRating((float) averageRating);
-                                    skatespot.setUserRatings(userRatings);
-                                    ref.child(markerKey).setValue(skatespot);
-                                }
-                            });
-                        }
+                        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                            @Override
+                            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                                HashMap<String, Double> userRatings = skatespot.getUserRatings();
+                                userRatings.put(user.getEmail().replace(".", ""), (double) rating);
+                                averageRating = getRating(userRatings);
+                                ratingBar.setRating((float) averageRating);
+                                skatespot.setUserRatings(userRatings);
+                                ref.child(markerKey).setValue(skatespot);
+                                Toast.makeText(getApplicationContext(), "You submitted a rating!", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
 
                         TextView name = (TextView) findViewById(R.id.spot_name);
                         name.setText(skatespot.getName());

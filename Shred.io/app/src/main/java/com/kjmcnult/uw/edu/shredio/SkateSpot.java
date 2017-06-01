@@ -63,7 +63,7 @@ public class SkateSpot {
         this.userRatings = userRatings;
     }
 
-    public Double getRating() {
+    public static Double getRating(HashMap<String, Double> userRatings) {
         Double ratingTotal = 0.00;
         if(userRatings != null) {
             for (Double rating : userRatings.values()) {
