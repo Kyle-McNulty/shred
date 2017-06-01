@@ -6,42 +6,42 @@
 
     <TextView
         android:id="@+id/spot_name"
-        android:text="Spot Name Here"
+        android:text="@string/name_placeholder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/customRed"
-        android:textSize="35dp"/>
+        android:textSize="35sp"/>
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <Button
             android:id="@+id/button1"
-            android:text="Rail"
+            android:text="@string/rail"
             android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
             android:id="@+id/button2"
-            android:text="Stairs"
+            android:text="@string/stairs"
             android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
             android:id="@+id/button3"
-            android:text="Ledge"
+            android:text="@string/ledge"
             android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
             android:id="@+id/button4"
-            android:text="Gap"
+            android:text="@string/gap"
             android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
             android:id="@+id/button5"
-            android:text="Ramp"
+            android:text="@string/ramp"
             android:visibility="gone"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
@@ -58,17 +58,17 @@
         />
     <TextView
         android:id="@+id/spot_description"
-        android:text="Information about the spot here"
+        android:text="@string/description_placeholder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <TextView
         android:id="@+id/spot_tags"
-        android:text="List of Spot Tags Here"
+        android:text="@string/tags_placeholder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <Button
         android:id="@+id/spot_directions"
-        android:text="Get directions!"
+        android:text="@string/directions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/customRed"
