@@ -109,8 +109,7 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
         Button button5 = (Button) findViewById(R.id.button5);
         button5.setOnClickListener(this);
         ids[4] = button5.getId();
-
-
+        
         final EditText nameText = (EditText) findViewById(R.id.new_spot_name);
         final EditText descriptionText = (EditText)findViewById(R.id.new_spot_description);
 
