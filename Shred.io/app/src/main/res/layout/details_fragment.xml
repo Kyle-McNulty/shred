@@ -2,7 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="15dp">
+    android:padding="15dp"
+    android:backgroundTint="@color/customBlue"
+    android:background="@color/customBlue">
 
     <TextView
         android:id="@+id/spot_name"
@@ -10,41 +12,64 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/customRed"
-        android:textSize="35sp"/>
+        android:textAllCaps="true"
+        android:textSize="30sp"/>
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <Button
-            android:id="@+id/button1"
+        <TextView
+            android:id="@+id/tagTitle"
+            android:text="@string/tagTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16dp"
+            android:textColor="@color/customRed"
+            android:padding="5dp"/>
+        <TextView
+            android:id="@+id/tag1"
             android:text="@string/rail"
             android:visibility="gone"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <Button
-            android:id="@+id/button2"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+            android:padding="5dp"/>
+        <TextView
+            android:id="@+id/tag2"
             android:text="@string/stairs"
             android:visibility="gone"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <Button
-            android:id="@+id/button3"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+
+            android:padding="5dp"/>
+        <TextView
+            android:id="@+id/tag3"
             android:text="@string/ledge"
             android:visibility="gone"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <Button
-            android:id="@+id/button4"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+
+            android:padding="5dp"/>
+        <TextView
+            android:id="@+id/tag4"
             android:text="@string/gap"
             android:visibility="gone"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-        <Button
-            android:id="@+id/button5"
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+
+            android:padding="5dp"/>
+        <TextView
+            android:id="@+id/tag5"
             android:text="@string/ramp"
             android:visibility="gone"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@color/colorWhite"
+
+            android:padding="5dp"/>
     </LinearLayout>
     <ImageView
         android:id="@+id/spot_image"
@@ -53,17 +78,19 @@
         android:layout_height="wrap_content"
         android:minWidth="300dp"
         android:minHeight="350dp"
-        android:maxHeight="300dp"
+        android:maxHeight="325dp"
         android:layout_gravity="center"
         />
     <TextView
         android:id="@+id/spot_description"
         android:text="@string/description_placeholder"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorWhite"/>
     <TextView
         android:id="@+id/spot_tags"
         android:text="@string/tags_placeholder"
+        android:visibility="gone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
     <Button
