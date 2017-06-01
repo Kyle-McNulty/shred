@@ -50,27 +50,19 @@ import static com.kjmcnult.uw.edu.shredio.R.id.button4;
 import static com.kjmcnult.uw.edu.shredio.R.id.container;
 
 /**
- * Created by kyle on 5/23/17.
+ * Activity for creating a new spot and posting it to firebase
  */
 
 public class CreateSpotActivity extends AppCompatActivity implements com.google.android.gms.location.LocationListener, View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    private static final String TAG= "com.kjmcnult.uw.edu.shredio.CreateSpotFragment";
-    private static final String NAME_PARAM_KEY = "name";
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int LOCATION_REQUEST_CODE = 2;
-    private static Uri mLocationForPhotos;
     private DatabaseReference myRef;
     private Bitmap bitmap;
     private LatLng currentLocation;
     private GoogleApiClient mGoogleApiClient;
     private int[] ids;
     private ArrayList<Boolean> idBools;
-
-    public CreateSpotActivity() {
-        // Required empty public constructor
-    }
-
 
     @Override
     protected void onStart() {
@@ -160,9 +152,10 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
                 //store the image first, then set the image string as a location/identifier in order to retrieve it
                 FirebaseStorage storage = FirebaseStorage.getInstance();
                 StorageReference storageRef = storage.getReference();
-                storageRef = storageRef.child("spots/" + name); //change to use variable for name
+                storageRef = storageRef.child("spots/" + name);
 
                 // check if anything has been left blank
+                // if anything is blank, notify the user and do not let them upload
                 if(description.equals("") || name.equals("") || bitmap == null){
                     // don't let the user post the spot
                     Toast.makeText(getApplicationContext(), "Please make sure you fill out all fields", Toast.LENGTH_LONG).show();
