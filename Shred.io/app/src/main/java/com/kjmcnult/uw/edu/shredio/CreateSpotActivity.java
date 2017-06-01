@@ -160,7 +160,7 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
                 com.kjmcnult.uw.edu.shredio.LatLng location = new com.kjmcnult.uw.edu.shredio.LatLng(currentLocation.latitude, currentLocation.longitude);
 
                 // Log.v(TAG, "Adding location at: " + location.toString());
-                
+
                 HashMap<String, Double> map = new HashMap<String, Double>();
                 RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar);
                 map.put(FirebaseAuth.getInstance().getCurrentUser().getEmail().replace(".", ""), (double)ratingBar.getRating());
