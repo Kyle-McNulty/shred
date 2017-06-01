@@ -184,25 +184,26 @@ public class DetailsActivity extends AppCompatActivity{
                 ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
                     @Override
                     public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                        // add the current rating to the map
-                        userRatings.put(user.getEmail().replace(".", ""), (double)rating);
-                        // update the map in the database
-                        Map<String, Object> childUpdates = new HashMap<>();
-                        childUpdates.put("/userRatings", userRatings);
-                        ref.child(markerKey).updateChildren(childUpdates);
-                        // don't change it anymore
-                        ratingBar.setIsIndicator(true);
-                        // get the average
-                        Log.v(TAG, userRatings.toString());
-                        // set the bar to the new rating
-                        leaveRating = false;
+                        if(leaveRating) {
+                            leaveRating = false;
+                            // add the current rating to the map
+                            userRatings.put(user.getEmail().replace(".", ""), (double) rating);
+                            // update the map in the database
+                            Map<String, Object> childUpdates = new HashMap<>();
+                            childUpdates.put("/userRatings", userRatings);
+                            ref.child(markerKey).updateChildren(childUpdates);
+                            // don't change it anymore
+                            ratingBar.setIsIndicator(true);
+                            // get the average
+                            Log.v(TAG, userRatings.toString());
+                            // set the bar to the new rating
+                            double ratingAverage = getRating(userRatings);
+                            ratingBar.setRating((float)ratingAverage);
+
+                        }
                     }
                 });
                 Toast.makeText(getApplicationContext(), "Select a rating on the bar above", Toast.LENGTH_SHORT).show();
-                if(leaveRating == false){
-                    double ratingAverage = getRating(userRatings);
-                    ratingBar.setRating((float)ratingAverage);
-                }
             }
         });
 

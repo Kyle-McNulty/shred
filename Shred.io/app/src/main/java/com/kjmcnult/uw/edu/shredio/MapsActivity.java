@@ -48,6 +48,8 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
+import static com.kjmcnult.uw.edu.shredio.SkateSpot.getRating;
+
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
     private GoogleMap mMap;
@@ -304,7 +306,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             spotDescription.setText(spot.getDescription());
             spotLocation.setText(spot.getLocation().toString());
             spotKey.setText(spot.getKey());
-            Double averageRating = spot.getRating();
+            Double averageRating = getRating(spot.getUserRatings());
             ratingBar.setRating(Float.parseFloat(averageRating.toString()));
 
             // Return the completed view to render on screen
