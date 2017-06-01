@@ -143,7 +143,7 @@ public class DetailsActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 if (user == null) {
-                    Toast.makeText(getApplicationContext(), "You must login to leave ratings" + rating, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "You must login to leave ratings"   , Toast.LENGTH_SHORT).show();
                 } else {
                     leaveRating = true;
                     ratingBar.setIsIndicator(false);
