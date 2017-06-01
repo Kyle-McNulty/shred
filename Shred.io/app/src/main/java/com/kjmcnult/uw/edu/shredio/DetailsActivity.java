@@ -94,7 +94,19 @@ public class DetailsActivity extends AppCompatActivity{
                         ratingBar.setRating((float)averageRating);
 
                         // check if the user has already left a rating
-                        if(!skatespot.getUserRatings().keySet().contains(user.getEmail())){
+                        if(skatespot.getUserRatings() != null) {
+                            if (!skatespot.getUserRatings().keySet().contains(user.getEmail())) {
+                                ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                                    @Override
+                                    public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                                        HashMap<String, Double> userRatings = skatespot.getUserRatings();
+                                        userRatings.put(user.getEmail(), (double) rating);
+                                        averageRating = skatespot.getRating();
+                                        ratingBar.setRating((float) averageRating);
+                                    }
+                                });
+                            }
+                        } else{
                             ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
                                 @Override
                                 public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {

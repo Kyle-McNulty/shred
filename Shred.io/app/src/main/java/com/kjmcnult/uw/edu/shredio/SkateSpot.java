@@ -53,9 +53,13 @@ public class SkateSpot {
 
     public Double getRating() {
         Double ratingTotal = 0.00;
-        for(Double rating : userRatings.values()){
-            ratingTotal += rating;
+        if(userRatings != null) {
+            for (Double rating : userRatings.values()) {
+                ratingTotal += rating;
+            }
+            return ratingTotal / userRatings.keySet().size();
+        } else {
+            return ratingTotal;
         }
-        return ratingTotal/userRatings.keySet().size();
     }
 }
