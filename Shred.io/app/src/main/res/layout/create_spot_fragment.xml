@@ -5,13 +5,13 @@
 
     <EditText
         android:id="@+id/new_spot_name"
-        android:hint="Spot Name Here"
+        android:hint="@string/name_placeholder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <EditText
         android:id="@+id/new_spot_description"
-        android:hint="Information about the spot here"
+        android:hint="@string/description_placeholder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -32,27 +32,27 @@
         android:layout_height="wrap_content">
         <Button
             android:id="@+id/button1"
-            android:text="Rail"
+            android:text="@string/rail"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
             android:id="@+id/button2"
-            android:text="Stairs"
+            android:text="@string/stairs"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
             android:id="@+id/button3"
-            android:text="Ledge"
+            android:text="@string/ledge"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
             android:id="@+id/button4"
-            android:text="Gap"
+            android:text="@string/gap"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
         <Button
             android:id="@+id/button5"
-            android:text="Ramp"
+            android:text="@string/ramp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
     </LinearLayout>
@@ -60,6 +60,11 @@
     <Button
         android:id="@+id/select_image"
         android:text="Choose Image!"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageView
+        android:id="@+id/image_preview"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
