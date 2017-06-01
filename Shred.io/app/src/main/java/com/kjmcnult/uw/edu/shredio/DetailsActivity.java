@@ -98,7 +98,6 @@ public class DetailsActivity extends AppCompatActivity{
                 Iterable<DataSnapshot> skatespots = dataSnapshot.getChildren();
                 for (DataSnapshot snap : skatespots) {
                     if (snap.getKey().equals(markerKey)) {
-                        // Log.v(TAG, "Skatespot: " + snap.toString());
                         final SkateSpot skatespot = snap.getValue(SkateSpot.class);
 
                         // get the map from the snapshot
@@ -128,13 +127,11 @@ public class DetailsActivity extends AppCompatActivity{
                         //get the image from storage
                         FirebaseStorage storage = FirebaseStorage.getInstance();
                         StorageReference storageRef = storage.getReference();
-                        // Log.v(TAG, skatespot.getImageResource());
                         storageRef = storageRef.child(skatespot.getImageResource());
 
                         download(storageRef);
                     }
                 }
-//                Log.v(TAG, "Skatespot: " + dataSnapshot.toString());
             }
 
             @Override
@@ -164,7 +161,6 @@ public class DetailsActivity extends AppCompatActivity{
                                 // don't change it anymore
                                 ratingBar.setIsIndicator(true);
                                 // get the average
-                                Log.v(TAG, userRatings.toString());
                                 // set the bar to the new rating
                                 double ratingAverage = getRating(userRatings);
                                 ratingBar.setRating((float) ratingAverage);

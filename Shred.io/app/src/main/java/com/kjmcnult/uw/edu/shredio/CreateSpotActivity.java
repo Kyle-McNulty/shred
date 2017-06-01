@@ -207,7 +207,6 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
             }
         });
     }
@@ -257,7 +256,7 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
                     //if button has already been pressed, chane background color back to normal
                     v.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.colorWhite));
                 } else {
-                    //change color to show selected
+                    //change color to indicate the button has been selected
                     v.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.customRed));
                 }
                 idBools.set(id, !idBools.get(id));

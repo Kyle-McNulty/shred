@@ -98,7 +98,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 TextView locationView = (TextView) view.findViewById(R.id.spotLocation);
 
-                Log.v(TAG, "String of location: " + locationView.getText().toString());
                 String locationString = locationView.getText().toString();
                 mBundle.putString("location", locationString);
                 mIntent.putExtras(mBundle);
@@ -107,6 +106,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         });
 
         DatabaseReference ref = database.getReference("Spots");
+        // adds all the markers to the map from the database
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -114,7 +114,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 for (DataSnapshot snap : skatespots) {
                     SkateSpot skatespot = snap.getValue(SkateSpot.class);
                     skatespot.setKey(snap.getKey());
-                    Log.v(TAG, skatespot.getLocation().toString());
                     spotsAdapter.add(skatespot);
                     markers.add(mMap.addMarker(new MarkerOptions()
                             .title(skatespot.getName())
@@ -127,7 +126,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.v(TAG, "The read failed: " + databaseError.getCode());
             }
         });
     }
@@ -190,8 +188,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mMap.setOnMarkerClickListener(this);
 
-        //mMap.getUiSettings().setZoomControlsEnabled(true);
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -252,7 +248,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     protected void onStart() {
-        Log.v(TAG, "Starting");
         invalidateOptionsMenu();
         googleApiClient.connect();
         super.onStart();
@@ -261,7 +256,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onResume() {
         super.onResume();
-        Log.v(TAG, "Resuming");
         invalidateOptionsMenu();
     }
 
