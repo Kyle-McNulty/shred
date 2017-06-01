@@ -1,44 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:padding="15dp">
 
     <TextView
         android:id="@+id/spot_name"
         android:text="Spot Name Here"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-    <TextView
-        android:id="@+id/date_posted"
-        android:text="Example Date Here"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
+        android:layout_height="wrap_content"
+        android:textColor="@color/customRed"
+        android:textSize="35dp"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/button1"
+            android:text="Rail"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/button2"
+            android:text="Stairs"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/button3"
+            android:text="Ledge"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/button4"
+            android:text="Gap"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/button5"
+            android:text="Ramp"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
+    <ImageView
+        android:id="@+id/spot_image"
+        android:padding="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minWidth="300dp"
+        android:minHeight="350dp"
+        android:maxHeight="300dp"
+        android:layout_gravity="center"
+        />
     <TextView
         android:id="@+id/spot_description"
         android:text="Information about the spot here"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-
     <TextView
         android:id="@+id/spot_tags"
         android:text="List of Spot Tags Here"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
     <Button
         android:id="@+id/spot_directions"
         android:text="Get directions!"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
-
-
-
-
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/customRed"
+        android:layout_gravity="center"
+        android:textColor="@color/colorWhite"/>
 </LinearLayout>
