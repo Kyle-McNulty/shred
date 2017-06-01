@@ -80,7 +80,7 @@ public class DetailsActivity extends AppCompatActivity{
         final TextView tag5 = (TextView) findViewById(R.id.tag5);
         ids[4] = tag5;
 
-        DatabaseReference ref = database.getReference("Spots");
+        final DatabaseReference ref = database.getReference("Spots");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -100,10 +100,11 @@ public class DetailsActivity extends AppCompatActivity{
                                 @Override
                                 public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
                                     HashMap<String, Double> userRatings = skatespot.getUserRatings();
-                                    userRatings.put(user.getEmail(), (double) rating);
+                                    userRatings.put(user.getEmail().replace(".", ""), (double) rating);
                                     averageRating = skatespot.getRating();
                                     ratingBar.setRating((float) averageRating);
-
+                                    skatespot.setUserRatings(userRatings);
+                                    ref.child(markerKey).setValue(skatespot);
                                 }
                             });
                         }
