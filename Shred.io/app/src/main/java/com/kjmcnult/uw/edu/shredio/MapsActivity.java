@@ -66,10 +66,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
-        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
-//        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
-//                .findFragmentById(R.id.map);
-//        mapFragment.getMapAsync(this);
 
         // MAP STUFF
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
@@ -82,20 +78,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .addApi(LocationServices.API)
                 .build();
 
-        // LIST STUFF
-//        ArrayList<Spot> testlist = new ArrayList<>();
-//        testlist.add();
         final LatLng loc = new LatLng(47.6553, 122.3035);
-        final Spot testSpot = new Spot("name1", loc, "desc");
 
-//        final ArrayAdapter<Spot> adapter = new ArrayAdapter<Spot>(
-//                this,
-//                R.layout.list_item,
-//                R.id.txtItem );
+
+        // LIST STUFF
         final ArrayList<SkateSpot> spotArrayList = new ArrayList<>();
         final SpotsAdapter spotsAdapter = new SpotsAdapter(this, spotArrayList);
         ListView lv = (ListView)findViewById(R.id.list);
-        //lv.setAdapter(adapter);
         lv.setAdapter(spotsAdapter);
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -131,7 +120,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> skatespots = dataSnapshot.getChildren();
                 for (DataSnapshot snap : skatespots) {
-                    // Log.v(TAG, "Skatespot: " + snap.toString());
                     SkateSpot skatespot = snap.getValue(SkateSpot.class);
                     spotsAdapter.add(skatespot);
                     mMap.addMarker(new MarkerOptions()
@@ -140,7 +128,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_shred_marker_small))
                             .position(skatespot.getLocation().getLatLng()));
                 }
-//                Log.v(TAG, "Skatespot: " + dataSnapshot.toString());
             }
 
             @Override
@@ -148,44 +135,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Log.v(TAG, "The read failed: " + databaseError.getCode());
             }
         });
-
-
-//        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                Log.v(TAG,"SNAPSHOT: " + dataSnapshot.toString());
-//                Iterable<DataSnapshot> itr = dataSnapshot.getChildren();
-//                for (DataSnapshot obj : itr) {
-//                    //Spot spot = (Spot) obj;
-//                    //Log.v(TAG, obj.getValue() + " <---");
-//                    Object object = obj.getValue();
-//                    //Log.v(TAG, object.getClass() + "<---");
-//                    HashMap<String, Object> hashMap = (HashMap<String, Object>) object;
-//                    Log.v(TAG, hashMap.keySet().toString());
-//                    if (hashMap.keySet().contains("location") && hashMap.keySet().contains("name")) {
-//                        HashMap<String, Double> location = (HashMap<String, Double>) hashMap.get("location");
-//                        LatLng latLng = new LatLng(location.get("latitude"), location.get("longitude"));
-//                        Spot spot = new Spot();
-//                        spot.setName(hashMap.get("name").toString());
-//                        spot.setDescription(hashMap.get("description").toString());
-//                        spot.setLocation(latLng);
-//                        //adapter.add(spot);
-//                        spotsAdapter.add(spot);
-//                        mMap.addMarker(new MarkerOptions()
-//                                .title(obj.getKey())
-//                                .snippet(hashMap.get("description").toString())
-//                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_shred_marker_small))
-//                                .position(latLng));
-//                    }
-//                }
-//                View dragView = findViewById(R.id.dragView);
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
     }
 
     @Override
@@ -225,11 +174,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 FirebaseAuth.getInstance().signOut();
                 invalidateOptionsMenu();
                 Snackbar.make(findViewById(R.id.map_activity), "You just signed out!", Snackbar.LENGTH_SHORT).show();
-//                Intent intent_signout = new Intent(MapsActivity.this, LoginActivity.class);
-//                intent_signout.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//                intent_signout.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
-//                startActivity(intent_signout);
-//                finish();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -257,27 +201,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DatabaseReference myRef = database.getReference("spot");
-                //Bitmap bitmap = new
-                //Spot spot = new Spot("Steven's Rail", currentLocation, "Sick Rail over here at my apartment");
-                //this should send the Spot to the create spot fragment
-//                FragmentManager fm = getSupportFragmentManager();
-//                fm.beginTransaction().replace(R.id.container, CreateSpotFragment.newInstance("rail")).addToBackStack(null).commit();
                 Intent newSpotIntent = new Intent(MapsActivity.this, CreateSpotActivity.class);
                 startActivity(newSpotIntent);
-                // the marker should be created after the Spot submits it, and the location should be when the Spot first clicks new
-
-
-                //Spot s = new Spot();
-//                if(currentLocation != null) {
-//                    Log.v(TAG, currentLocation.toString());
-//                    mMap.addMarker(new MarkerOptions()
-//                            .title("Steven's Rail")
-//                            .snippet("Sick rail over here")
-//                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker))
-//                            .position(currentLocation));
-//                    myRef.setValue(spot);
-//                }
             }
         });
     }
@@ -285,15 +210,11 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public boolean onMarkerClick(final Marker marker) {
         FragmentManager fm = getSupportFragmentManager();
-        //need to set this up so the fragment created is based off of the marker clicked
-        //potentially a for loop checking each value's latlng to see if it matches the marker's
-        //fm.beginTransaction().replace(R.id.mainLayout, DetailsFragment.newInstance("Terwilliger Rail")).addToBackStack(null).commit();
         Intent mIntent = new Intent(MapsActivity.this, DetailsActivity.class);
         Bundle mBundle = new Bundle();
         mBundle.putString("location", marker.getPosition().toString());
         mIntent.putExtras(mBundle);
         Log.v(TAG, marker.getPosition().toString());
-        //extras.putString();
         startActivity(mIntent);
         return true;
     }
@@ -301,7 +222,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onLocationChanged(Location location) {
         currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-        // Log.v(TAG, "Location changed to : " + currentLocation.toString());
         mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
     }
 
@@ -347,22 +267,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     public View onCreateView(String name, Context context, AttributeSet attrs) {
-        //View rootView = findViewById(R.id.map_activity);
-        //FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //DatabaseReference myRef = database.getReference("spot");
-//                //Bitmap bitmap = new
-//                //Spot spot = new Spot("Steven's Rail", currentLocation, "Sick Rail over hear at my apartment");
-//                mMap.addMarker(new MarkerOptions()
-//                        .title("Steven's Rail")
-//                        .snippet("Sick rail over here")
-//                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_action_name))
-//                        .position(currentLocation));
-//                //myRef.setValue("test spot");
-//            }
-//        });
         return super.onCreateView(name, context, attrs);
     }
 
