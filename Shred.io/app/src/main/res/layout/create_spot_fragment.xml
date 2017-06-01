@@ -15,14 +15,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-    <EditText
-        android:id="@+id/new_spot_tags"
-        android:hint="Enter Tags Here"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-
     <TextView
-        android:text="Select any tags that apply!"
+        android:text="@string/select_tags"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -59,7 +53,7 @@
 
     <Button
         android:id="@+id/select_image"
-        android:text="Choose Image!"
+        android:text="@string/take_picture"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -71,7 +65,7 @@
 
     <Button
         android:id="@+id/new_spot_upload"
-        android:text="Upload"
+        android:text="@string/upload"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
