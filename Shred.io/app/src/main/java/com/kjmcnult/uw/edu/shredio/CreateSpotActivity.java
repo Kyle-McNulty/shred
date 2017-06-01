@@ -10,7 +10,9 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -53,6 +55,7 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
     private static final String TAG= "com.kjmcnult.uw.edu.shredio.CreateSpotFragment";
     private static final String NAME_PARAM_KEY = "name";
     private static final int REQUEST_IMAGE_CAPTURE = 1;
+    private static final int LOCATION_REQUEST_CODE = 2;
     private static Uri mLocationForPhotos;
     private DatabaseReference myRef;
     private Bitmap bitmap;
@@ -263,10 +266,23 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-        Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-        if (mLastLocation != null) {
-            this.currentLocation = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+
+        int permissionCheck = ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION);
+        if(permissionCheck == PackageManager.PERMISSION_GRANTED) {
+            //have permission, can go ahead and do stuff
+
+            //assumes location settings enabled
+            Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
+//            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
+            if (mLastLocation != null) {
+                this.currentLocation = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+            }
         }
+        else {
+            //request permission
+            ActivityCompat.requestPermissions(this, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_REQUEST_CODE);
+        }
+
     }
 
     @Override
