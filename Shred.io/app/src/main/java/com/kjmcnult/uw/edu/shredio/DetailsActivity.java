@@ -33,7 +33,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import static android.R.attr.key;
 import static android.R.attr.name;
 import static android.R.attr.rating;
 import static com.kjmcnult.uw.edu.shredio.R.id.ratingBar;
@@ -51,6 +53,8 @@ public class DetailsActivity extends AppCompatActivity{
     private ImageView image;
     private TextView[] ids;
     private double averageRating;
+    private HashMap<String, Double> userRatings;
+    private boolean leaveRating;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -58,6 +62,7 @@ public class DetailsActivity extends AppCompatActivity{
         setContentView(R.layout.details_fragment);
 
         image = (ImageView) findViewById(R.id.spot_image);
+        leaveRating = false;
 
         markerLocation = getIntent().getExtras().getString("location");
         markerKey = getIntent().getExtras().getString("key");
@@ -82,6 +87,10 @@ public class DetailsActivity extends AppCompatActivity{
         final TextView tag5 = (TextView) findViewById(R.id.tag5);
         ids[4] = tag5;
 
+        final RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+
+        Button ratingButton = (Button) findViewById(R.id.ratingButton);
+
         final DatabaseReference ref = database.getReference("Spots");
         ref.addValueEventListener(new ValueEventListener() {
             @Override
@@ -92,31 +101,46 @@ public class DetailsActivity extends AppCompatActivity{
                         // Log.v(TAG, "Skatespot: " + snap.toString());
                         final SkateSpot skatespot = snap.getValue(SkateSpot.class);
 
-                        averageRating = getRating(skatespot.getUserRatings());
+                        // get the map from the snapshot
+                        userRatings = skatespot.getUserRatings();
+                        averageRating = getRating(userRatings);
                         Log.v(TAG, skatespot.getUserRatings().toString());
-                        RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+
                         ratingBar.setRating((float)averageRating);
+                        ratingBar.setIsIndicator(true);
 
-                        if (skatespot.getUserRatings().keySet().contains(user.getEmail().replace(".", ""))) {
-                            ratingBar.setIsIndicator(true);
-                        }
+//                        if (skatespot.getUserRatings().keySet().contains(user.getEmail().replace(".", ""))) {
+//                        }
 
-                        // check if the user has already left a rating
-                        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
-                            @Override
-                            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                                if (!skatespot.getUserRatings().keySet().contains(user.getEmail().replace(".", ""))) {
-                                    HashMap<String, Double> userRatings = skatespot.getUserRatings();
-                                    userRatings.put(user.getEmail().replace(".", ""), (double) rating);
-                                    averageRating = getRating(userRatings);
-                                    ratingBar.setRating((float) averageRating);
-                                    skatespot.setUserRatings(userRatings);
-                                    ref.child(markerKey).setValue(skatespot);
-                                    ratingBar.setIsIndicator(true);
-                                    Toast.makeText(getApplicationContext(), "You submitted a rating of: " + rating, Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        });
+//                        ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+//                            @Override
+//                            public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+////                                if (!skatespot.getUserRatings().keySet().contains(user.getEmail().replace(".", ""))) {
+////                                    HashMap<String, Double> userRatings = skatespot.getUserRatings();
+////                                    userRatings.put(user.getEmail().replace(".", ""), (double) rating);
+////                                    averageRating = getRating(userRatings);
+////                                    ratingBar.setRating((float) averageRating);
+////                                    skatespot.setUserRatings(userRatings);
+////                                    ref.child(markerKey).setValue(skatespot);
+////                                    ratingBar.setIsIndicator(true);
+////                                    Toast.makeText(getApplicationContext(), "You submitted a rating of: " + rating, Toast.LENGTH_SHORT).show();
+////                                }
+//                                // get the map from the snapshot
+//                                HashMap<String, Double> userRatings = skatespot.getUserRatings();
+//                                // add the current rating to the map
+//                                userRatings.put(user.getEmail().replace(".", ""), (double)rating);
+//                                // update the map in the database
+//                                Map<String, Object> childUpdates = new HashMap<>();
+//                                childUpdates.put("/userRatings", userRatings);
+//                                ref.child(markerKey).updateChildren(childUpdates);
+//                                // get the average
+//                                double ratingAverage = getRating(userRatings);
+//                                // set the bar to the new rating
+//                                ratingBar.setRating((float)ratingAverage);
+//                                // don't change it anymore
+//                                ratingBar.setIsIndicator(true);
+//                            }
+//                        });
 
                         TextView name = (TextView) findViewById(R.id.spot_name);
                         name.setText(skatespot.getName());
@@ -149,6 +173,36 @@ public class DetailsActivity extends AppCompatActivity{
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 Log.v(TAG, "The read failed: " + databaseError.getCode());
+            }
+        });
+
+        ratingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                leaveRating = true;
+                ratingBar.setIsIndicator(false);
+                ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                    @Override
+                    public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                        // add the current rating to the map
+                        userRatings.put(user.getEmail().replace(".", ""), (double)rating);
+                        // update the map in the database
+                        Map<String, Object> childUpdates = new HashMap<>();
+                        childUpdates.put("/userRatings", userRatings);
+                        ref.child(markerKey).updateChildren(childUpdates);
+                        // don't change it anymore
+                        ratingBar.setIsIndicator(true);
+                        // get the average
+                        Log.v(TAG, userRatings.toString());
+                        // set the bar to the new rating
+                        leaveRating = false;
+                    }
+                });
+                Toast.makeText(getApplicationContext(), "Select a rating on the bar above", Toast.LENGTH_SHORT).show();
+                if(leaveRating == false){
+                    double ratingAverage = getRating(userRatings);
+                    ratingBar.setRating((float)ratingAverage);
+                }
             }
         });
 

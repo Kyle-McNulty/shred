@@ -19,5 +19,6 @@
     <string name="select_tags">Select any tags that apply!</string>
     <string name="take_picture">Take picture!</string>
     <string name="upload">Submit</string>
+    <string name="rating">Leave a rating</string>
 
 </resources>

@@ -91,6 +91,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:foregroundTint="@color/customRed"/>
+    <Button
+        android:id="@+id/ratingButton"
+        android:text="@string/rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
 
     <ImageView
         android:id="@+id/spot_image"
