@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+<LinearLayout
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="15dp"
@@ -8,12 +11,23 @@
 
     <TextView
         android:id="@+id/spot_name"
-        android:text="@string/name_placeholder"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/customRed"
+        android:text="@string/name_placeholder"
         android:textAllCaps="true"
-        android:textSize="30sp"/>
+        android:textColor="@color/customRed"
+        android:textSize="30sp"
+        android:layout_gravity="center"/>
+
+    <Button
+        android:id="@+id/spot_directions"
+        android:layout_width="wrap_content"
+        android:layout_height="59dp"
+        android:layout_gravity="center"
+        android:backgroundTint="@color/customRed"
+        android:text="@string/directions"
+        android:textColor="@color/colorWhite" />
+
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
@@ -71,39 +85,36 @@
 
             android:padding="5dp"/>
     </LinearLayout>
+
     <RatingBar
         android:id="@+id/ratingBar"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:foregroundTint="@color/customRed"/>
 
     <ImageView
         android:id="@+id/spot_image"
-        android:padding="10dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minWidth="300dp"
-        android:minHeight="350dp"
-        android:maxHeight="325dp"
+        android:layout_height="289dp"
         android:layout_gravity="center"
-        />
-    <TextView
-        android:id="@+id/spot_description"
-        android:text="@string/description_placeholder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorWhite"/>
+        android:maxHeight="325dp"
+        android:minHeight="350dp"
+        android:minWidth="300dp"
+        android:padding="10dp" />
+
     <TextView
         android:id="@+id/spot_tags"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="@string/tags_placeholder"
-        android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
-    <Button
-        android:id="@+id/spot_directions"
-        android:text="@string/directions"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/spot_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/customRed"
-        android:layout_gravity="center"
-        android:textColor="@color/colorWhite"/>
+        android:text="@string/description_placeholder"
+        android:textColor="@color/colorWhite" />
+
 </LinearLayout>
+</ScrollView>
