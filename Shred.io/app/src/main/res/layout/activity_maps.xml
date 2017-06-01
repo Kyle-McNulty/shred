@@ -47,7 +47,7 @@
             android:id="@+id/dragView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="#ffffff"
+            android:background="@color/customBlue"
             android:orientation="vertical"
             android:clickable="true"
             android:focusable="false"

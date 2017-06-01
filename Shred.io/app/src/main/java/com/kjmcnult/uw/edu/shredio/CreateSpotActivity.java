@@ -5,24 +5,20 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Location;
-import android.media.Image;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -40,14 +36,6 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
-
-import static android.R.attr.bitmap;
-import static android.R.attr.button;
-import static android.R.attr.description;
-import static android.R.attr.id;
-import static android.app.Activity.RESULT_OK;
-import static com.kjmcnult.uw.edu.shredio.R.id.button4;
-import static com.kjmcnult.uw.edu.shredio.R.id.container;
 
 /**
  * Created by kyle on 5/23/17.
@@ -134,7 +122,7 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
         final EditText descriptionText = (EditText)findViewById(R.id.new_spot_description);
         final EditText tagsText = (EditText)findViewById(R.id.new_spot_tags);
 
-        Button chooseImageButton = (Button) findViewById(R.id.select_image);
+        ImageButton chooseImageButton = (ImageButton) findViewById(R.id.select_image);
 
         chooseImageButton.setOnClickListener(new View.OnClickListener() {
             @Override
