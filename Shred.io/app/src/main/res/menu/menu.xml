@@ -5,7 +5,7 @@
 
     <item android:id="@+id/menu_item_account"
         android:title="Account"
-        android:icon="@drawable/ic_account_white"
+        android:icon="@drawable/account_icon"
         app:showAsAction="always"
         />
 
