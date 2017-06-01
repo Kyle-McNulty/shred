@@ -76,15 +76,4 @@
         android:layout_marginTop="20dp"
         android:padding="12dp"
         />
-
-    <!--<TextView-->
-        <!--android:id="@+id/login_signup"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="@string/login_signup_text"-->
-        <!--android:textAlignment="center"-->
-        <!--android:paddingBottom="10dp"-->
-        <!--android:paddingTop="30dp"-->
-        <!--android:textSize="18sp"-->
-        <!--/>-->
 </LinearLayout>

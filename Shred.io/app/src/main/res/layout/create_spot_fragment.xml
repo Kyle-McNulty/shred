@@ -24,17 +24,9 @@
         android:textColorHint="@color/colorWhite"
         android:backgroundTint="@color/colorWhite"/>
 
-    <EditText
-        android:id="@+id/new_spot_tags"
-        android:hint="Enter Tags Here"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/colorWhite"
-        android:textColorHint="@color/colorWhite"
-        android:backgroundTint="@color/colorWhite"/>
 
     <TextView
-        android:text="Select tags"
+        android:text="@string/select_tags"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/customRed"
@@ -116,7 +108,7 @@
 
     <Button
         android:id="@+id/new_spot_upload"
-        android:text="Submit"
+        android:text="@string/upload"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center|bottom"

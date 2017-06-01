@@ -16,5 +16,8 @@
     <string name="tags_placeholder">List of Spot Tags Here</string>
     <string name="directions">Get directions!</string>
     <string name="tagTitle">Tags: </string>
+    <string name="select_tags">Select any tags that apply!</string>
+    <string name="take_picture">Take picture!</string>
+    <string name="upload">Submit</string>
 
 </resources>

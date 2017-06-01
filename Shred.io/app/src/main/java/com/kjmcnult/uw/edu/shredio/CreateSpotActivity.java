@@ -38,27 +38,19 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 /**
- * Created by kyle on 5/23/17.
+ * Activity for creating a new spot and posting it to firebase
  */
 
 public class CreateSpotActivity extends AppCompatActivity implements com.google.android.gms.location.LocationListener, View.OnClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener {
 
-    private static final String TAG= "com.kjmcnult.uw.edu.shredio.CreateSpotFragment";
-    private static final String NAME_PARAM_KEY = "name";
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int LOCATION_REQUEST_CODE = 2;
-    private static Uri mLocationForPhotos;
     private DatabaseReference myRef;
     private Bitmap bitmap;
     private LatLng currentLocation;
     private GoogleApiClient mGoogleApiClient;
     private int[] ids;
     private ArrayList<Boolean> idBools;
-
-    public CreateSpotActivity() {
-        // Required empty public constructor
-    }
-
 
     @Override
     protected void onStart() {
@@ -97,6 +89,7 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
             idBools.add(i, false);
         }
 
+        //set the on click listeners for each button and add ids to array to track
         Button button1 = (Button) findViewById(R.id.button1);
         button1.setOnClickListener(this);
         ids[0] = button1.getId();
@@ -120,7 +113,6 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
 
         final EditText nameText = (EditText) findViewById(R.id.new_spot_name);
         final EditText descriptionText = (EditText)findViewById(R.id.new_spot_description);
-        final EditText tagsText = (EditText)findViewById(R.id.new_spot_tags);
 
         ImageButton chooseImageButton = (ImageButton) findViewById(R.id.select_image);
 
@@ -147,20 +139,20 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
                 //store the image first, then set the image string as a location/identifier in order to retrieve it
                 FirebaseStorage storage = FirebaseStorage.getInstance();
                 StorageReference storageRef = storage.getReference();
-                storageRef = storageRef.child("spots/" + name); //change to use variable for name
+                storageRef = storageRef.child("spots/" + name);
 
                 // check if anything has been left blank
+                // if anything is blank, notify the user and do not let them upload
                 if(description.equals("") || name.equals("") || bitmap == null){
                     // don't let the user post the spot
                     Toast.makeText(getApplicationContext(), "Please make sure you fill out all fields", Toast.LENGTH_LONG).show();
                 } else {
-
+                    // create new spot object to store in database
                     SkateSpot spot = new SkateSpot(name, description, "spots/" + name, currentLocation, idBools);
 
                     //clear the edit text fields
                     nameText.setText("");
                     descriptionText.setText("");
-                    tagsText.setText("");
 
                     //uploads with the image currently stored in the instance variable
                     if (bitmap != null)
@@ -177,8 +169,7 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
         });
     }
 
-
-
+    // what happens when we receive the image back from the camera app
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
@@ -189,6 +180,7 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
         }
     }
 
+    // uploads the image to Firebase storage
     public void upload(StorageReference storageRef){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -208,6 +200,7 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
         });
     }
 
+    // updates the current location through an instance variable
     @Override
     public void onLocationChanged(Location location) {
         this.currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
@@ -215,14 +208,11 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-
+        // check if we have permission, else ask for it
         int permissionCheck = ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION);
         if(permissionCheck == PackageManager.PERMISSION_GRANTED) {
             //have permission, can go ahead and do stuff
-
-            //assumes location settings enabled
             Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-//            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
             if (mLastLocation != null) {
                 this.currentLocation = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
             }
@@ -244,9 +234,9 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
 
     }
 
+    // when one of the tag buttons is pressed, highlight it to make it apparent and set the corresponding value in the list accordingly
     @Override
     public void onClick(View v) {
-        Log.v("hahAA", idBools.toString());
         int vId = v.getId();
         for(int id = 0; id < ids.length; id++){
             if(ids[id] == vId){
@@ -264,6 +254,7 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
 
     }
 
+    // inner class for our custom spot object
     public static class SkateSpot{
         public String spotName;
         public String description;
