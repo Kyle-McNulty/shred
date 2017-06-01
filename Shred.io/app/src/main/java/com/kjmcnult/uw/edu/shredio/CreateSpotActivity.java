@@ -35,6 +35,7 @@ import com.google.firebase.storage.StorageTask;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
 
 import static android.R.attr.bitmap;
 import static android.R.attr.button;
@@ -58,7 +59,7 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
     private LatLng currentLocation;
     private GoogleApiClient mGoogleApiClient;
     private int[] ids;
-    private boolean[] idBools;
+    private ArrayList<Boolean> idBools;
 //    private static final String SUMMARY_PARAM_KEY = "summary";
 //    private static final String IMAGE_PARAM_KEY = "image";
 //    private static final String ARTICLE_PARAM_KEY = "article";
@@ -118,9 +119,10 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
 //        }
 
         ids = new int[5];
-        idBools = new boolean[5];
-        for(boolean bool : idBools){
-            bool = false;
+        idBools = new ArrayList<>();
+        //initialize array to all false
+        for(int i = 0; i < 5; i++){
+            idBools.add(i, false);
         }
 
         Button button1 = (Button) findViewById(R.id.button1);
@@ -194,7 +196,7 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
                 String description = descriptionText.getText().toString();
                 String tags = tagsText.getText().toString();
 
-                SkateSpot spot = new SkateSpot(name, description, "spots/" + name, tags, currentLocation);
+                SkateSpot spot = new SkateSpot(name, description, "spots/" + name, tags, currentLocation, idBools);
 
                 //clear the edit text fields
                 nameText.setText("");
@@ -279,35 +281,23 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
 
     @Override
     public void onClick(View v) {
-        Log.v("hahAA", "button pressed");
+        Log.v("hahAA", idBools.toString());
         int vId = v.getId();
         for(int id = 0; id < ids.length; id++){
             if(ids[id] == vId){
                 //set the boolean for the specific id to opposite
-                if(idBools[id]){
+                if(idBools.get(id)){
                     //if button has already been pressed, chane background color back to normal
                     v.setBackgroundColor(Color.GRAY);
                 } else {
                     //change color to show selected
                     v.setBackgroundColor(Color.YELLOW);
                 }
-                idBools[id] = !idBools[id];
+                idBools.set(id, !idBools.get(id));
             }
         }
 
     }
-
-
-//    @Override
-//    public void onAttach(Context context) {
-//        super.onAttach(context);
-//
-//        try {
-//            callback = (OnButtonSelectedListener)context;
-//        }catch(ClassCastException e) {
-//            throw new ClassCastException(context.toString() + " must implement OnButtonSelectedListend");
-//        }
-//    }
 
     public static class SkateSpot{
         public String spotName;
@@ -315,34 +305,36 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
         public String imageResource;
         public String tags;
         public LatLng location;
+        public ArrayList<Boolean> ids;
 
         public SkateSpot(){}
 
-        public SkateSpot(String spotName, String description, String imageResource, String tags, LatLng location){
+        public SkateSpot(String spotName, String description, String imageResource, String tags, LatLng location, ArrayList<Boolean> ids){
             this.spotName = spotName;
             this.description = description;
             this.imageResource = imageResource;
             this.tags = tags;
             this.location = location;
+            this.ids = ids;
         }
 
-        public String getSpotName() {
-            return spotName;
-        }
-
-        public String getDescription() {
-            return description;
-        }
-
-        public String getImageResource() {
-            return imageResource;
-        }
-
-        public String getTags() {
-            return tags;
-        }
-
-        public LatLng getLocation() { return location; }
+//        public String getSpotName() {
+//            return spotName;
+//        }
+//
+//        public String getDescription() {
+//            return description;
+//        }
+//
+//        public String getImageResource() {
+//            return imageResource;
+//        }
+//
+//        public String getTags() {
+//            return tags;
+//        }
+//
+//        public LatLng getLocation() { return location; }
     }
 
 }

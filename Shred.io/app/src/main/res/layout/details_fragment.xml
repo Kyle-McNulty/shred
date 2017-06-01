@@ -11,12 +11,41 @@
         android:layout_height="wrap_content"
         android:textColor="@color/customRed"
         android:textSize="35dp"/>
-    <TextView
-        android:id="@+id/date_posted"
-        android:text=""
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/customBlue"/>
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/button1"
+            android:text="Rail"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/button2"
+            android:text="Stairs"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/button3"
+            android:text="Ledge"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/button4"
+            android:text="Gap"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <Button
+            android:id="@+id/button5"
+            android:text="Ramp"
+            android:visibility="gone"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </LinearLayout>
     <ImageView
         android:id="@+id/spot_image"
         android:padding="10dp"
