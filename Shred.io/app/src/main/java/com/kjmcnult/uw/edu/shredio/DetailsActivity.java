@@ -101,7 +101,7 @@ public class DetailsActivity extends AppCompatActivity{
                         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
                             @Override
                             public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
-                                if (!skatespot.getUserRatings().keySet().contains(user.getEmail())) {
+                                if (!skatespot.getUserRatings().keySet().contains(user.getEmail().replace(".", ""))) {
                                     HashMap<String, Double> userRatings = skatespot.getUserRatings();
                                     userRatings.put(user.getEmail().replace(".", ""), (double) rating);
                                     averageRating = getRating(userRatings);
