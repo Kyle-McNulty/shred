@@ -49,6 +49,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -101,20 +103,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Intent mIntent = new Intent(MapsActivity.this, DetailsActivity.class);
                 Bundle mBundle = new Bundle();
 
-                // mBundle.putString("key", )
+                TextView keyView = (TextView) view.findViewById(R.id.spotKey);
+                mBundle.putString("key", keyView.getText().toString());
 
                 TextView locationView = (TextView) view.findViewById(R.id.spotLocation);
 
                 Log.v(TAG, "String of location: " + locationView.getText().toString());
-
-                String locationString = locationView.getText().toString().substring(10);
-                locationString = locationString.substring(0, locationString.length() - 1);
-                String[] locations = locationString.split(",");
-                Log.v(TAG, "spotLocation: " + Double.parseDouble(locations[0]) + ", " + locations[1]);
-                LatLng location = new LatLng(Double.parseDouble(locations[0]), Double.parseDouble(locations[1]));
-                mBundle.putString("location", location.toString());
+                String locationString = locationView.getText().toString();
+//                String[] locations = locationString.split(",");
+//                Log.v(TAG, "spotLocation: " + Double.parseDouble(locations[0]) + ", " + locations[1]);
+//                LatLng location = new LatLng(Double.parseDouble(locations[0]), Double.parseDouble(locations[1]));
+                mBundle.putString("location", locationString);
                 mIntent.putExtras(mBundle);
-                Log.v(TAG, location.toString());
+//                Log.v(TAG, location.toString());
                 //extras.putString();
                 startActivity(mIntent);
                 //startActivity(new Intent(MapsActivity.this, DetailsActivity.class));
@@ -128,6 +129,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Iterable<DataSnapshot> skatespots = dataSnapshot.getChildren();
                 for (DataSnapshot snap : skatespots) {
                     SkateSpot skatespot = snap.getValue(SkateSpot.class);
+                    skatespot.setKey(snap.getKey());
                     Log.v(TAG, skatespot.getLocation().toString());
                     spotsAdapter.add(skatespot);
                     markers.add(mMap.addMarker(new MarkerOptions()
@@ -223,8 +225,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Bundle mBundle = new Bundle();
 
         mBundle.putString("key", marker.getTag().toString());
+        LatLng location = marker.getPosition();
+        String locationString = location.latitude + ", " + location.longitude;
 
-//        mBundle.putString("location", marker.getPosition().toString());
+        mBundle.putString("location", locationString);
         mIntent.putExtras(mBundle);
         Log.v(TAG, marker.getPosition().toString());
         startActivity(mIntent);
@@ -300,10 +304,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             TextView spotTitle = (TextView) convertView.findViewById(R.id.spotTitle);
             TextView spotDescription = (TextView) convertView.findViewById(R.id.spotDescription);
             TextView spotLocation = (TextView) convertView.findViewById(R.id.spotLocation);
+            TextView spotKey = (TextView) convertView.findViewById(R.id.spotKey);
             // Populate the data into the template view using the data object
             spotTitle.setText(spot.getName());
             spotDescription.setText(spot.getDescription());
             spotLocation.setText(spot.getLocation().toString());
+            spotKey.setText(spot.getKey());
             // Return the completed view to render on screen
             return convertView;
         }

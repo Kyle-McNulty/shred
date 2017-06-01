@@ -12,6 +12,7 @@ public class SkateSpot {
     public String imageResource;
     public LatLng location;
     public ArrayList<Boolean> ids;
+    private String key;
 
     public SkateSpot() {}
 
@@ -21,6 +22,7 @@ public class SkateSpot {
         this.imageResource = "spots/" + imageResource;
         this.location = location;
         this.ids = ids;
+        this.key = "";
     }
 
     public String getName() {
@@ -38,6 +40,12 @@ public class SkateSpot {
     public LatLng getLocation() { return location; }
 
     public ArrayList<Boolean> getIds() { return ids; }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public String getKey() { return key; }
 
     public String toString() {
         return name + ": " + description;

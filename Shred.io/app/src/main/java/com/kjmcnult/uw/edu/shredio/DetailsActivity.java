@@ -188,7 +188,7 @@ public class DetailsActivity extends AppCompatActivity{
             public void onClick(View v) {
                 // create a new intent to the user's maps application
                 Intent maps = new Intent(android.content.Intent.ACTION_VIEW,
-                        Uri.parse("http://maps.google.com/maps?daddr=" + markerLocation.substring(10, markerLocation.length() - 1)));
+                        Uri.parse("http://maps.google.com/maps?daddr=" + markerLocation));
                 startActivity(maps);
             }
         });
