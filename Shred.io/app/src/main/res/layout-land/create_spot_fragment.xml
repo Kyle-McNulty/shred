@@ -35,7 +35,6 @@
         android:textColor="@color/customRed"
         android:textColorHint="@color/colorWhite"
         android:textSize="20dp"
-        android:layout_marginTop="21dp"
         android:layout_below="@+id/new_spot_description"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
@@ -45,7 +44,9 @@
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tagsTitle">
+        android:layout_below="@+id/tagsTitle"
+        android:layout_alignRight="@+id/tagsTitle"
+        android:layout_alignEnd="@+id/tagsTitle">
         <Button
             android:id="@+id/button1"
             android:text="@string/rail"
@@ -85,22 +86,33 @@
         android:maxWidth="300dp"
         android:padding="0dp"
         android:layout_toEndOf="@+id/new_spot_description"
-        android:layout_alignParentTop="true" />
+        android:layout_alignParentTop="true"
+        android:layout_alignBottom="@+id/button5"
+        android:layout_toRightOf="@+id/new_spot_description" />
 
     <LinearLayout
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
         android:gravity="center"
+        android:id="@+id/linearLayout2"
         android:layout_below="@+id/image_preview"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
+
+        <RatingBar
+            android:id="@+id/ratingBar"
+            android:layout_width="wrap_content"
+            android:layout_height="73dp"
+            android:layout_alignBottom="@+id/image_preview"
+            android:layout_centerHorizontal="true" />
+
         <ImageButton
             android:id="@+id/select_image"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_camera"
             android:backgroundTint="@color/colorWhite"
-            />
+            android:src="@drawable/ic_camera" />
+
         <Button
             android:id="@+id/new_spot_upload"
             android:text="@string/upload"
@@ -110,6 +122,7 @@
             android:textColor="@color/customRed"
             android:textSize="20dp"
             />
+
     </LinearLayout>
 
     <Button

@@ -5,7 +5,6 @@
     android:padding="15dp"
     android:backgroundTint="@color/customBlue"
     android:background="@color/customBlue">
-
     <TextView
         android:id="@+id/spot_name"
         android:text="@string/name_placeholder"
@@ -14,22 +13,31 @@
         android:textColor="@color/customRed"
         android:textAllCaps="true"
         android:textSize="30sp"/>
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:foregroundTint="@color/customRed"
+        android:layout_below="@+id/spot_directions"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/linearLayout"
-        android:layout_above="@+id/spot_image"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        android:layout_below="@+id/spot_name">
+
         <TextView
             android:id="@+id/tagTitle"
-            android:text="@string/tagTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16dp"
+            android:padding="5dp"
+            android:text="@string/tagTitle"
             android:textColor="@color/customRed"
-            android:padding="5dp"/>
+            android:textSize="16dp"
+            />
+
         <TextView
             android:id="@+id/tag1"
             android:text="@string/rail"
@@ -84,8 +92,7 @@
         android:minHeight="350dp"
         android:maxHeight="325dp"
         android:layout_gravity="center"
-        android:layout_below="@+id/spot_directions"
-        android:layout_toEndOf="@+id/spot_description"
+        android:layout_below="@+id/ratingBar"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
     <TextView
@@ -94,10 +101,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/colorWhite"
-        android:layout_marginTop="12dp"
-        android:layout_below="@+id/spot_name"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_below="@+id/linearLayout" />
     <TextView
         android:id="@+id/spot_tags"
         android:text="@string/tags_placeholder"
@@ -112,9 +116,7 @@
         android:backgroundTint="@color/customRed"
         android:layout_gravity="center"
         android:textColor="@color/colorWhite"
-        android:layout_marginRight="42dp"
-        android:layout_marginEnd="42dp"
-        android:layout_alignTop="@+id/spot_description"
+        android:layout_alignTop="@+id/spot_tags"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 </RelativeLayout>
