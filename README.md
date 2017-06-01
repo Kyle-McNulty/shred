@@ -27,3 +27,5 @@ To create a spot, click the red button in the lower right corner of the maps vie
 As a user you have the ability to rate spots, this is an important feature for curating content.
 
 If you have any issues, please feel free to file an issue right here through Github!
+
+![](https://github.com/Kyle-McNulty/shred/blob/master/Shred.io/app/src/main/res/drawable/skateboarder.png)
