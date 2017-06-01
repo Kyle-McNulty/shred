@@ -5,25 +5,16 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.firebase.ui.storage.images.FirebaseImageLoader;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
@@ -34,18 +25,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import org.w3c.dom.Text;
-
-import java.sql.Ref;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
-
-import static android.R.attr.bitmap;
-import static android.R.attr.button;
-import static android.R.attr.description;
-import static java.security.AccessController.getContext;
 
 /**
  * Created by kyle on 5/23/17.
@@ -57,7 +40,7 @@ public class DetailsActivity extends AppCompatActivity{
     private static final String NAME_PARAM_KEY = "name";
     private String markerLocation;
     private ImageView image;
-    private Button[] ids;
+    private TextView[] ids;
     private ArrayList idBools;
 //    private static final String SUMMARY_PARAM_KEY = "summary";
 //    private static final String IMAGE_PARAM_KEY = "image";
@@ -91,22 +74,22 @@ public class DetailsActivity extends AppCompatActivity{
 
         idBools = new ArrayList<>();
 
-        ids = new Button[5];
+        ids = new TextView[5];
 
-        final Button button1 = (Button) findViewById(R.id.button1);
-        ids[0] = button1;
+        final TextView tag1 = (TextView) findViewById(R.id.tag1);
+        ids[0] = tag1;
 
-        final Button button2 = (Button) findViewById(R.id.button2);
-        ids[1] = button2;
+        final TextView tag2 = (TextView) findViewById(R.id.tag2);
+        ids[1] = tag2;
 
-        final Button button3 = (Button) findViewById(R.id.button3);
-        ids[2] = button3;
+        final TextView tag3 = (TextView) findViewById(R.id.tag3);
+        ids[2] = tag3;
 
-        final Button button4 = (Button) findViewById(R.id.button4);
-        ids[3] = button4;
+        final TextView tag4 = (TextView) findViewById(R.id.tag4);
+        ids[3] = tag4;
 
-        final Button button5 = (Button) findViewById(R.id.button5);
-        ids[4] = button5;
+        final TextView tag5 = (TextView) findViewById(R.id.tag5);
+        ids[4] = tag5;
 
 
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
