@@ -81,48 +81,50 @@ public class DetailsActivity extends AppCompatActivity{
                 for (DataSnapshot obj : itr) {
                     Object object = obj.getValue();
                     HashMap<String, Object> hashMap = (HashMap<String, Object>) object;
-                    HashMap<String, Double> location = (HashMap<String, Double>) hashMap.get("location");
-                    LatLng latLng = new LatLng(location.get("latitude"), location.get("longitude"));
-                    String stringLocation = latLng.toString();
-                    // if the locations match, we found the correct object, so retrieve it and update the view
-                    if(markerLocation.equals(stringLocation)){
-                        //set the appropriate fields for this database point
-                        TextView name = (TextView) findViewById(R.id.spot_name);
-                        name.setText(hashMap.get("spotName").toString());
+                    if (hashMap.keySet().contains("location")) {
+                        HashMap<String, Double> location = (HashMap<String, Double>) hashMap.get("location");
+                        LatLng latLng = new LatLng(location.get("latitude"), location.get("longitude"));
+                        String stringLocation = latLng.toString();
+                        // if the locations match, we found the correct object, so retrieve it and update the view
+                        if (markerLocation.equals(stringLocation)) {
+                            //set the appropriate fields for this database point
+                            TextView name = (TextView) findViewById(R.id.spot_name);
+                            name.setText(hashMap.get("spotName").toString());
 
-                        TextView description = (TextView) findViewById(R.id.spot_description);
-                        description.setText(hashMap.get("description").toString());
+                            TextView description = (TextView) findViewById(R.id.spot_description);
+                            description.setText(hashMap.get("description").toString());
 
-                        TextView tags = (TextView) findViewById(R.id.spot_tags);
-                        tags.setText(hashMap.get("tags").toString());
+                            TextView tags = (TextView) findViewById(R.id.spot_tags);
+                            tags.setText(hashMap.get("tags").toString());
 
-                        // converts the object stored in the database into a list of booleans
-                        String list = hashMap.get("ids").toString();
-                        list = list.substring(1, list.length() - 1);
-                        List<String> myList = new ArrayList<String>(Arrays.asList(list.split(", ")));
-                        for(String item : myList){
-                            if(item.equals("false")){
-                                idBools.add(false);
-                            } else{
-                                idBools.add(true);
+                            // converts the object stored in the database into a list of booleans
+                            String list = hashMap.get("ids").toString();
+                            list = list.substring(1, list.length() - 1);
+                            List<String> myList = new ArrayList<String>(Arrays.asList(list.split(", ")));
+                            for (String item : myList) {
+                                if (item.equals("false")) {
+                                    idBools.add(false);
+                                } else {
+                                    idBools.add(true);
+                                }
                             }
-                        }
 
-                        for(int j = 0; j < idBools.size(); j++){
-                            Log.v(TAG, idBools.get(j).toString());
-                            if((boolean)idBools.get(j)){
-                                // if the button was pressed for a specific tag, display it
-                                ids[j].setVisibility(View.VISIBLE);
+                            for (int j = 0; j < idBools.size(); j++) {
+                                Log.v(TAG, idBools.get(j).toString());
+                                if ((boolean) idBools.get(j)) {
+                                    // if the button was pressed for a specific tag, display it
+                                    ids[j].setVisibility(View.VISIBLE);
+                                }
                             }
-                        }
 
-                        //get the image from storage
-                        FirebaseStorage storage = FirebaseStorage.getInstance();
-                        StorageReference storageRef = storage.getReference();
-                        Log.v(TAG, hashMap.get("imageResource").toString());
-                        Log.v(TAG, hashMap.get("spotName").toString());
-                        storageRef = storageRef.child("spots/" + hashMap.get("spotName").toString());
-                        download(storageRef);
+                            //get the image from storage
+                            FirebaseStorage storage = FirebaseStorage.getInstance();
+                            StorageReference storageRef = storage.getReference();
+                            Log.v(TAG, hashMap.get("imageResource").toString());
+                            Log.v(TAG, hashMap.get("spotName").toString());
+                            storageRef = storageRef.child("spots/" + hashMap.get("spotName").toString());
+                            download(storageRef);
+                        }
                     }
                 }
             }

@@ -125,7 +125,6 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
 
         final EditText nameText = (EditText) findViewById(R.id.new_spot_name);
         final EditText descriptionText = (EditText)findViewById(R.id.new_spot_description);
-        final EditText tagsText = (EditText)findViewById(R.id.new_spot_tags);
 
         Button chooseImageButton = (Button) findViewById(R.id.select_image);
 
@@ -166,7 +165,6 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
                     //clear the edit text fields
                     nameText.setText("");
                     descriptionText.setText("");
-                    tagsText.setText("");
 
                     //uploads with the image currently stored in the instance variable
                     if (bitmap != null)
