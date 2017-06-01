@@ -36,6 +36,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.UUID;
 
 /**
  * Activity for creating a new spot and posting it to firebase
@@ -51,6 +52,10 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
     private GoogleApiClient mGoogleApiClient;
     private int[] ids;
     private ArrayList<Boolean> idBools;
+
+    public CreateSpotActivity() {
+        // Required empty public constructor
+    }
 
     @Override
     protected void onStart() {
@@ -109,8 +114,7 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
         Button button5 = (Button) findViewById(R.id.button5);
         button5.setOnClickListener(this);
         ids[4] = button5.getId();
-
-
+        
         final EditText nameText = (EditText) findViewById(R.id.new_spot_name);
         final EditText descriptionText = (EditText)findViewById(R.id.new_spot_description);
 
@@ -139,32 +143,33 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
                 //store the image first, then set the image string as a location/identifier in order to retrieve it
                 FirebaseStorage storage = FirebaseStorage.getInstance();
                 StorageReference storageRef = storage.getReference();
-                storageRef = storageRef.child("spots/" + name);
 
-                // check if anything has been left blank
-                // if anything is blank, notify the user and do not let them upload
-                if(description.equals("") || name.equals("") || bitmap == null){
-                    // don't let the user post the spot
-                    Toast.makeText(getApplicationContext(), "Please make sure you fill out all fields", Toast.LENGTH_LONG).show();
-                } else {
-                    // create new spot object to store in database
-                    SkateSpot spot = new SkateSpot(name, description, "spots/" + name, currentLocation, idBools);
+                //storageRef = storageRef.child("spots");
+                String photoID = UUID.randomUUID().toString();
+                storageRef = storageRef.child("spots/" + photoID); //change to use UUID for name
 
-                    //clear the edit text fields
-                    nameText.setText("");
-                    descriptionText.setText("");
-
-                    //uploads with the image currently stored in the instance variable
-                    if (bitmap != null)
-                        upload(storageRef);
-                    //uploads entry to database
-                    myRef.child(name).setValue(spot);
-
-                    // send user back to maps activity after creating the spot
-                    Toast.makeText(getApplicationContext(), "Success!", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(CreateSpotActivity.this, MapsActivity.class);
-                    startActivity(intent);
+                //uploads with the image currently stored in the instance variable
+                if(bitmap != null) {
+                    upload(storageRef);
                 }
+
+                com.kjmcnult.uw.edu.shredio.LatLng location = new com.kjmcnult.uw.edu.shredio.LatLng(currentLocation.latitude, currentLocation.latitude);
+
+                SkateSpot spot = new SkateSpot(name, description, photoID, location, idBools);
+
+                //clear the edit text fields
+                nameText.setText("");
+                descriptionText.setText("");
+
+                //child(spot.spotName).
+
+                myRef.child("Spots").push().setValue(spot);
+
+                //also need to add a marker to the map from here
+                //this should send back to the maps activity
+
+                Intent intent = new Intent(CreateSpotActivity.this, MapsActivity.class);
+                startActivity(intent);
             }
         });
     }
@@ -253,24 +258,4 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
         }
 
     }
-
-    // inner class for our custom spot object
-    public static class SkateSpot{
-        public String spotName;
-        public String description;
-        public String imageResource;
-        public LatLng location;
-        public ArrayList<Boolean> ids;
-
-        public SkateSpot(){}
-
-        public SkateSpot(String spotName, String description, String imageResource, LatLng location, ArrayList<Boolean> ids){
-            this.spotName = spotName;
-            this.description = description;
-            this.imageResource = imageResource;
-            this.location = location;
-            this.ids = ids;
-        }
-    }
-
 }

@@ -51,6 +51,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
@@ -58,9 +59,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private String TAG = "MapsActivity";
     GoogleApiClient googleApiClient;
     private int LOC_REQUEST_CODE = 1;
-    private FirebaseDatabase database;
+    private final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private LatLng currentLocation;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,8 +82,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .addApi(LocationServices.API)
                 .build();
 
-        database = FirebaseDatabase.getInstance();
-
         // LIST STUFF
 //        ArrayList<Spot> testlist = new ArrayList<>();
 //        testlist.add();
@@ -94,7 +92,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //                this,
 //                R.layout.list_item,
 //                R.id.txtItem );
-        ArrayList<Spot> spotArrayList = new ArrayList<>();
+        final ArrayList<SkateSpot> spotArrayList = new ArrayList<>();
         final SpotsAdapter spotsAdapter = new SpotsAdapter(this, spotArrayList);
         ListView lv = (ListView)findViewById(R.id.list);
         //lv.setAdapter(adapter);
@@ -127,112 +125,68 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             }
         });
 
-        DatabaseReference ref = database.getReference();
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference ref = database.getReference("Spots");
+        ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.v(TAG,"SNAPSHOT: " + dataSnapshot.toString());
-                Iterable<DataSnapshot> itr = dataSnapshot.getChildren();
-                for (DataSnapshot obj : itr) {
-                    //Spot spot = (Spot) obj;
-                    //Log.v(TAG, obj.getValue() + " <---");
-                    Object object = obj.getValue();
-                    //Log.v(TAG, object.getClass() + "<---");
-                    HashMap<String, Object> hashMap = (HashMap<String, Object>) object;
-                    Log.v(TAG, hashMap.keySet().toString());
-                    if (hashMap.keySet().contains("location") && hashMap.keySet().contains("spotName")) {
-                        HashMap<String, Double> location = (HashMap<String, Double>) hashMap.get("location");
-                        LatLng latLng = new LatLng(location.get("latitude"), location.get("longitude"));
-                        Spot spot = new Spot();
-                        spot.setName(hashMap.get("spotName").toString());
-                        spot.setDescription(hashMap.get("description").toString());
-                        spot.setLocation(latLng);
-                        //adapter.add(spot);
-                        spotsAdapter.add(spot);
-                        mMap.addMarker(new MarkerOptions()
-                                .title(obj.getKey())
-                                .snippet(hashMap.get("description").toString())
-                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.marker_filled_smaller))
-                                .position(latLng));
-                    }
+                Iterable<DataSnapshot> skatespots = dataSnapshot.getChildren();
+                for (DataSnapshot snap : skatespots) {
+                    // Log.v(TAG, "Skatespot: " + snap.toString());
+                    SkateSpot skatespot = snap.getValue(SkateSpot.class);
+                    spotsAdapter.add(skatespot);
+                    mMap.addMarker(new MarkerOptions()
+                            .title(skatespot.getName())
+                            .snippet(skatespot.getDescription())
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_shred_marker_small))
+                            .position(skatespot.getLocation().getLatLng()));
                 }
-                View dragView = findViewById(R.id.dragView);
-//                dragView.setOnDragListener(new View.OnDragListener() {
-//                    @Override
-//                    public boolean onDrag(View v, DragEvent event) {
-//                        Log.v(TAG, event.toString());
-//                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-//                            ImageView listIcon = (ImageView) findViewById(R.id.list_icon);
-//                            Drawable icon = null;
-//                            if (event.getAction() == DragEvent.ACTION_DRAG_ENTERED) {
-//                                Log.v(TAG, "SET ICON TO DOWN ARROW");
-//                                icon = (Drawable) getDrawable(R.drawable.ic_list_away);
-//                            } else if ((event.getAction() == DragEvent.ACTION_DRAG_EXITED)) {
-//                                Log.v(TAG, "SET ICON TO UP ARROW");
-//                                icon = (Drawable) getDrawable(R.drawable.ic_list_drag);
-//                            }
-//                            listIcon.setImageDrawable(icon);
-//                            return true;
-//                        }
-//                        return false;
-//                    }
-//                });
-                // onclicklistener for changing of listview icon
-//                final ImageView listIcon = (ImageView) findViewById(R.id.list_icon);
-//                listIcon.setOnClickListener(new View.OnClickListener() {
-//
-//                    private Boolean listShown = false;
-//                    @Override
-//                    public void onClick(View v) {
-//                        this.listShown = !this.listShown;
-//                        Drawable icon = null;
-//                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
-//                            if (listShown) {
-//                                icon = (Drawable) getDrawable(R.drawable.ic_list_drag);
-//                            } else {
-//                                icon = (Drawable) getDrawable(R.drawable.ic_list_away);
-//                            }
-//                        }
-//                        listIcon.setImageDrawable(icon);
-//                    }
-//                });
+//                Log.v(TAG, "Skatespot: " + dataSnapshot.toString());
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Log.v(TAG, "The read failed: " + databaseError.getCode());
             }
         });
-        //adapter.add(testSpot);
-        //adapter.add(testSpot);
 
-        //initialize
-        //initializeMap();
 
-    }
-
-//    private void initializeMap() {
-//
-//        mMapFragment = SupportMapFragment.newInstance();
-//        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-//        fragmentTransaction.add(R.id.fragment_container, mMapFragment, "map");
-//        fragmentTransaction.commit();
-//
-//        handler.post(new Runnable() {
+//        ref.addListenerForSingleValueEvent(new ValueEventListener() {
 //            @Override
-//            public void run() {
-//                mMap = mMapFragment.getMap();
-//
-//                mMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-//                    @Override
-//                    public void onCameraChange(CameraPosition cameraPosition) {
-//                        // Do something here
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                Log.v(TAG,"SNAPSHOT: " + dataSnapshot.toString());
+//                Iterable<DataSnapshot> itr = dataSnapshot.getChildren();
+//                for (DataSnapshot obj : itr) {
+//                    //Spot spot = (Spot) obj;
+//                    //Log.v(TAG, obj.getValue() + " <---");
+//                    Object object = obj.getValue();
+//                    //Log.v(TAG, object.getClass() + "<---");
+//                    HashMap<String, Object> hashMap = (HashMap<String, Object>) object;
+//                    Log.v(TAG, hashMap.keySet().toString());
+//                    if (hashMap.keySet().contains("location") && hashMap.keySet().contains("name")) {
+//                        HashMap<String, Double> location = (HashMap<String, Double>) hashMap.get("location");
+//                        LatLng latLng = new LatLng(location.get("latitude"), location.get("longitude"));
+//                        Spot spot = new Spot();
+//                        spot.setName(hashMap.get("name").toString());
+//                        spot.setDescription(hashMap.get("description").toString());
+//                        spot.setLocation(latLng);
+//                        //adapter.add(spot);
+//                        spotsAdapter.add(spot);
+//                        mMap.addMarker(new MarkerOptions()
+//                                .title(obj.getKey())
+//                                .snippet(hashMap.get("description").toString())
+//                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_shred_marker_small))
+//                                .position(latLng));
 //                    }
-//                });
+//                }
+//                View dragView = findViewById(R.id.dragView);
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
 //            }
 //        });
-//    }
-
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -347,7 +301,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onLocationChanged(Location location) {
         currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-        Log.v(TAG, "Location changed to : " + currentLocation.toString());
+        // Log.v(TAG, "Location changed to : " + currentLocation.toString());
         mMap.moveCamera(CameraUpdateFactory.newLatLng(currentLocation));
     }
 
@@ -412,15 +366,16 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         return super.onCreateView(name, context, attrs);
     }
 
-    public class SpotsAdapter extends ArrayAdapter<Spot> {
-        public SpotsAdapter(Context context, ArrayList<Spot> spots) {
+    public class SpotsAdapter extends ArrayAdapter<SkateSpot> {
+
+        public SpotsAdapter(Context context, ArrayList<SkateSpot> spots) {
             super(context, 0, spots);
         }
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             // Get the data item for this position
-            Spot spot = getItem(position);
+            SkateSpot spot = getItem(position);
             // Check if an existing view is being reused, otherwise inflate the view
             if (convertView == null) {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
