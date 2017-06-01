@@ -109,6 +109,7 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
             idBools.add(i, false);
         }
 
+        //set the on click listeners for each button and add ids to array to track
         Button button1 = (Button) findViewById(R.id.button1);
         button1.setOnClickListener(this);
         ids[0] = button1.getId();
@@ -166,7 +167,7 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
                     // don't let the user post the spot
                     Toast.makeText(getApplicationContext(), "Please make sure you fill out all fields", Toast.LENGTH_LONG).show();
                 } else {
-
+                    // create new spot object to store in database
                     SkateSpot spot = new SkateSpot(name, description, "spots/" + name, currentLocation, idBools);
 
                     //clear the edit text fields
@@ -189,8 +190,7 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
         });
     }
 
-
-
+    // what happens when we receive the image back from the camera app
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
@@ -201,6 +201,7 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
         }
     }
 
+    // uploads the image to Firebase storage
     public void upload(StorageReference storageRef){
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
@@ -220,6 +221,7 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
         });
     }
 
+    // updates the current location through an instance variable
     @Override
     public void onLocationChanged(Location location) {
         this.currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
@@ -227,14 +229,11 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
 
     @Override
     public void onConnected(@Nullable Bundle bundle) {
-
+        // check if we have permission, else ask for it
         int permissionCheck = ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION);
         if(permissionCheck == PackageManager.PERMISSION_GRANTED) {
             //have permission, can go ahead and do stuff
-
-            //assumes location settings enabled
             Location mLastLocation = LocationServices.FusedLocationApi.getLastLocation(mGoogleApiClient);
-//            LocationServices.FusedLocationApi.requestLocationUpdates(mGoogleApiClient, mLocationRequest, this);
             if (mLastLocation != null) {
                 this.currentLocation = new LatLng(mLastLocation.getLatitude(), mLastLocation.getLongitude());
             }
@@ -256,9 +255,9 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
 
     }
 
+    // when one of the tag buttons is pressed, highlight it to make it apparent and set the corresponding value in the list accordingly
     @Override
     public void onClick(View v) {
-        Log.v("hahAA", idBools.toString());
         int vId = v.getId();
         for(int id = 0; id < ids.length; id++){
             if(ids[id] == vId){
@@ -276,6 +275,7 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
 
     }
 
+    // inner class for our custom spot object
     public static class SkateSpot{
         public String spotName;
         public String description;
