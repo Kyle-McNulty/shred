@@ -65,7 +65,7 @@ public class DetailsActivity extends AppCompatActivity{
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        // initialize the array of textviews with appropriate values
+            // initialize the array of textviews with appropriate values
         ids = new TextView[5];
         final TextView tag1 = (TextView) findViewById(R.id.tag1);
         ids[0] = tag1;
@@ -97,6 +97,10 @@ public class DetailsActivity extends AppCompatActivity{
                         RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar);
                         ratingBar.setRating((float)averageRating);
 
+                        if (skatespot.getUserRatings().keySet().contains(user.getEmail().replace(".", ""))) {
+                            ratingBar.setIsIndicator(true);
+                        }
+
                         // check if the user has already left a rating
                         ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
                             @Override
@@ -108,6 +112,7 @@ public class DetailsActivity extends AppCompatActivity{
                                     ratingBar.setRating((float) averageRating);
                                     skatespot.setUserRatings(userRatings);
                                     ref.child(markerKey).setValue(skatespot);
+                                    ratingBar.setIsIndicator(true);
                                     Toast.makeText(getApplicationContext(), "You submitted a rating of: " + rating, Toast.LENGTH_SHORT).show();
                                 }
                             }
