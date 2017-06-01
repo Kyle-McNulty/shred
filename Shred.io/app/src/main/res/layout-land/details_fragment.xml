@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:foregroundTint="@color/customRed"
-        android:layout_below="@+id/spot_directions"
+        android:layout_above="@+id/spot_image"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
     <LinearLayout
@@ -92,7 +92,7 @@
         android:minHeight="350dp"
         android:maxHeight="325dp"
         android:layout_gravity="center"
-        android:layout_below="@+id/ratingBar"
+        android:layout_below="@+id/ratingButton"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true" />
     <TextView
@@ -119,4 +119,12 @@
         android:layout_alignTop="@+id/spot_tags"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+    <Button
+        android:id="@+id/ratingButton"
+        android:text="@string/rating"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spot_description"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 </RelativeLayout>

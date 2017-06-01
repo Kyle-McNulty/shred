@@ -164,7 +164,7 @@ public class DetailsActivity extends AppCompatActivity{
                                 // set the bar to the new rating
                                 double ratingAverage = getRating(userRatings);
                                 ratingBar.setRating((float) ratingAverage);
-                                Toast.makeText(getApplicationContext(), "You submitted a rating of: " + rating, Toast.LENGTH_SHORT);
+                                Toast.makeText(getApplicationContext(), "You submitted a rating of: " + rating, Toast.LENGTH_SHORT).show();
                             }
                         }
                     });
