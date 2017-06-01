@@ -110,7 +110,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //                        .commit();
                 Intent mIntent = new Intent(MapsActivity.this, DetailsActivity.class);
                 Bundle mBundle = new Bundle();
+
+                // mBundle.putString("key", )
+
                 TextView locationView = (TextView) view.findViewById(R.id.spotLocation);
+
+                Log.v(TAG, "String of location: " + locationView.getText().toString());
+
                 String locationString = locationView.getText().toString().substring(10);
                 locationString = locationString.substring(0, locationString.length() - 1);
                 String[] locations = locationString.split(",");
@@ -134,11 +140,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                     // Log.v(TAG, "Skatespot: " + snap.toString());
                     SkateSpot skatespot = snap.getValue(SkateSpot.class);
                     spotsAdapter.add(skatespot);
-                    mMap.addMarker(new MarkerOptions()
+                    Marker marker = mMap.addMarker(new MarkerOptions()
                             .title(skatespot.getName())
                             .snippet(skatespot.getDescription())
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_shred_marker_small))
                             .position(skatespot.getLocation().getLatLng()));
+                    marker.setTag(snap.getKey());
                 }
 //                Log.v(TAG, "Skatespot: " + dataSnapshot.toString());
             }
@@ -148,44 +155,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Log.v(TAG, "The read failed: " + databaseError.getCode());
             }
         });
-
-
-//        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                Log.v(TAG,"SNAPSHOT: " + dataSnapshot.toString());
-//                Iterable<DataSnapshot> itr = dataSnapshot.getChildren();
-//                for (DataSnapshot obj : itr) {
-//                    //Spot spot = (Spot) obj;
-//                    //Log.v(TAG, obj.getValue() + " <---");
-//                    Object object = obj.getValue();
-//                    //Log.v(TAG, object.getClass() + "<---");
-//                    HashMap<String, Object> hashMap = (HashMap<String, Object>) object;
-//                    Log.v(TAG, hashMap.keySet().toString());
-//                    if (hashMap.keySet().contains("location") && hashMap.keySet().contains("name")) {
-//                        HashMap<String, Double> location = (HashMap<String, Double>) hashMap.get("location");
-//                        LatLng latLng = new LatLng(location.get("latitude"), location.get("longitude"));
-//                        Spot spot = new Spot();
-//                        spot.setName(hashMap.get("name").toString());
-//                        spot.setDescription(hashMap.get("description").toString());
-//                        spot.setLocation(latLng);
-//                        //adapter.add(spot);
-//                        spotsAdapter.add(spot);
-//                        mMap.addMarker(new MarkerOptions()
-//                                .title(obj.getKey())
-//                                .snippet(hashMap.get("description").toString())
-//                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_shred_marker_small))
-//                                .position(latLng));
-//                    }
-//                }
-//                View dragView = findViewById(R.id.dragView);
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
     }
 
     @Override
@@ -290,7 +259,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         //fm.beginTransaction().replace(R.id.mainLayout, DetailsFragment.newInstance("Terwilliger Rail")).addToBackStack(null).commit();
         Intent mIntent = new Intent(MapsActivity.this, DetailsActivity.class);
         Bundle mBundle = new Bundle();
-        mBundle.putString("location", marker.getPosition().toString());
+
+        mBundle.putString("key", marker.getTag().toString());
+
+//        mBundle.putString("location", marker.getPosition().toString());
         mIntent.putExtras(mBundle);
         Log.v(TAG, marker.getPosition().toString());
         //extras.putString();
