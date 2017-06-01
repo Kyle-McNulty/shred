@@ -153,9 +153,6 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
                     upload(storageRef);
                 }
 
-                String description = descriptionText.getText().toString();
-                String tags = tagsText.getText().toString();
-
                 com.kjmcnult.uw.edu.shredio.LatLng location = new com.kjmcnult.uw.edu.shredio.LatLng(currentLocation.latitude, currentLocation.latitude);
 
                 SkateSpot spot = new SkateSpot(name, description, photoID, location, idBools);
@@ -163,7 +160,6 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
                 //clear the edit text fields
                 nameText.setText("");
                 descriptionText.setText("");
-                tagsText.setText("");
 
                 //child(spot.spotName).
 
@@ -262,27 +258,4 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
         }
 
     }
-<<<<<<< HEAD
-
-    // inner class for our custom spot object
-    public static class SkateSpot{
-        public String spotName;
-        public String description;
-        public String imageResource;
-        public LatLng location;
-        public ArrayList<Boolean> ids;
-
-        public SkateSpot(){}
-
-        public SkateSpot(String spotName, String description, String imageResource, LatLng location, ArrayList<Boolean> ids){
-            this.spotName = spotName;
-            this.description = description;
-            this.imageResource = imageResource;
-            this.location = location;
-            this.ids = ids;
-        }
-    }
-
-=======
->>>>>>> changed spotsadapter to use skatespot
 }

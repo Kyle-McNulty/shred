@@ -40,7 +40,6 @@ public class DetailsActivity extends AppCompatActivity{
     private String markerLocation;
     private ImageView image;
     private TextView[] ids;
-    private ArrayList idBools;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,9 +51,6 @@ public class DetailsActivity extends AppCompatActivity{
         markerLocation = getIntent().getExtras().getString("location");
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference ref = database.getReference();
-
-        idBools = new ArrayList<>();
 
         // initialize the array of textviews with appropriate values
         ids = new TextView[5];
@@ -88,25 +84,10 @@ public class DetailsActivity extends AppCompatActivity{
                     TextView description = (TextView) findViewById(R.id.spot_description);
                     description.setText(skatespot.getDescription());
 
-                    String list = hashMap.get("ids").toString();
-                    list = list.substring(1, list.length() - 1);
-                    Log.v("hahaa", list);
-                    //list.replaceAll("[0-9]" + "=", "");
-                    //Log.v("hahaa", list);
-                    List<String> myList = new ArrayList<String>(Arrays.asList(list.split(", ")));
-                    Log.v("hahaa", myList.toString());
-                    for(String item : myList){
-                        if(item.equals("false")){
-                            idBools.add(false);
-                        } else{
-                            idBools.add(true);
-                        }
-                    }
-                    Log.v("hahaa", idBools.toString());
+                    ArrayList<Boolean> idBools = skatespot.getIds();
 
                     for(int j = 0; j < idBools.size(); j++){
-                        Log.v(TAG, idBools.get(j).toString());
-                        if((boolean)idBools.get(j)){
+                        if(idBools.get(j)){
                             // if the button pressed was true
                             // then set the button to be visible
                             ids[j].setVisibility(View.VISIBLE);
@@ -116,77 +97,83 @@ public class DetailsActivity extends AppCompatActivity{
                     //get the image from storage
                     FirebaseStorage storage = FirebaseStorage.getInstance();
                     StorageReference storageRef = storage.getReference();
-                    Log.v(TAG, hashMap.get("imageResource").toString());
-                    Log.v(TAG, hashMap.get("spotName").toString());
-                    storageRef = storageRef.child("spots/" + hashMap.get("spotName").toString());
+                    // Log.v(TAG, skatespot.getImageResource());
+                    storageRef = storageRef.child(skatespot.getImageResource());
 
                     download(storageRef);
                 }
 //                Log.v(TAG, "Skatespot: " + dataSnapshot.toString());
             }
 
-
-        // iterate through the database to show appropriate information for the marker that was clicked on
-        ref.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Iterable<DataSnapshot> itr = dataSnapshot.getChildren();
-                for (DataSnapshot obj : itr) {
-                    Object object = obj.getValue();
-                    HashMap<String, Object> hashMap = (HashMap<String, Object>) object;
-                    if (hashMap.keySet().contains("location")) {
-                        HashMap<String, Double> location = (HashMap<String, Double>) hashMap.get("location");
-                        LatLng latLng = new LatLng(location.get("latitude"), location.get("longitude"));
-                        String stringLocation = latLng.toString();
-                        // if the locations match, we found the correct object, so retrieve it and update the view
-                        if (markerLocation.equals(stringLocation)) {
-                            //set the appropriate fields for this database point
-                            TextView name = (TextView) findViewById(R.id.spot_name);
-                            name.setText(hashMap.get("spotName").toString());
-
-                            TextView description = (TextView) findViewById(R.id.spot_description);
-                            description.setText(hashMap.get("description").toString());
-
-                            TextView tags = (TextView) findViewById(R.id.spot_tags);
-                            tags.setText(hashMap.get("tags").toString());
-
-                            // converts the object stored in the database into a list of booleans
-                            String list = hashMap.get("ids").toString();
-                            list = list.substring(1, list.length() - 1);
-                            List<String> myList = new ArrayList<String>(Arrays.asList(list.split(", ")));
-                            for (String item : myList) {
-                                if (item.equals("false")) {
-                                    idBools.add(false);
-                                } else {
-                                    idBools.add(true);
-                                }
-                            }
-
-                            for (int j = 0; j < idBools.size(); j++) {
-                                Log.v(TAG, idBools.get(j).toString());
-                                if ((boolean) idBools.get(j)) {
-                                    // if the button was pressed for a specific tag, display it
-                                    ids[j].setVisibility(View.VISIBLE);
-                                }
-                            }
-
-                            //get the image from storage
-                            FirebaseStorage storage = FirebaseStorage.getInstance();
-                            StorageReference storageRef = storage.getReference();
-                            Log.v(TAG, hashMap.get("imageResource").toString());
-                            Log.v(TAG, hashMap.get("spotName").toString());
-                            storageRef = storageRef.child("spots/" + hashMap.get("spotName").toString());
-                            download(storageRef);
-                        }
-                    }
-                }
-            }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
+                Log.v(TAG, "The read failed: " + databaseError.getCode());
             }
         });
+
+
+
+        // iterate through the database to show appropriate information for the marker that was clicked on
+//        ref.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                Iterable<DataSnapshot> itr = dataSnapshot.getChildren();
+//                for (DataSnapshot obj : itr) {
+//                    Object object = obj.getValue();
+//                    HashMap<String, Object> hashMap = (HashMap<String, Object>) object;
+//                    if (hashMap.keySet().contains("location")) {
+//                        HashMap<String, Double> location = (HashMap<String, Double>) hashMap.get("location");
+//                        LatLng latLng = new LatLng(location.get("latitude"), location.get("longitude"));
+//                        String stringLocation = latLng.toString();
+//                        // if the locations match, we found the correct object, so retrieve it and update the view
+//                        if (markerLocation.equals(stringLocation)) {
+//                            //set the appropriate fields for this database point
+//                            TextView name = (TextView) findViewById(R.id.spot_name);
+//                            name.setText(hashMap.get("spotName").toString());
+//
+//                            TextView description = (TextView) findViewById(R.id.spot_description);
+//                            description.setText(hashMap.get("description").toString());
+//
+//                            TextView tags = (TextView) findViewById(R.id.spot_tags);
+//                            tags.setText(hashMap.get("tags").toString());
+//
+//                            // converts the object stored in the database into a list of booleans
+//                            String list = hashMap.get("ids").toString();
+//                            list = list.substring(1, list.length() - 1);
+//                            List<String> myList = new ArrayList<String>(Arrays.asList(list.split(", ")));
+//                            for (String item : myList) {
+//                                if (item.equals("false")) {
+//                                    idBools.add(false);
+//                                } else {
+//                                    idBools.add(true);
+//                                }
+//                            }
+//
+//                            for (int j = 0; j < idBools.size(); j++) {
+//                                Log.v(TAG, idBools.get(j).toString());
+//                                if ((boolean) idBools.get(j)) {
+//                                    // if the button was pressed for a specific tag, display it
+//                                    ids[j].setVisibility(View.VISIBLE);
+//                                }
+//                            }
+//
+//                            //get the image from storage
+//                            FirebaseStorage storage = FirebaseStorage.getInstance();
+//                            StorageReference storageRef = storage.getReference();
+//                            Log.v(TAG, hashMap.get("imageResource").toString());
+//                            Log.v(TAG, hashMap.get("spotName").toString());
+//                            storageRef = storageRef.child("spots/" + hashMap.get("spotName").toString());
+//                            download(storageRef);
+//                        }
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//        });
 
         Button button = (Button) findViewById(R.id.spot_directions);
 
