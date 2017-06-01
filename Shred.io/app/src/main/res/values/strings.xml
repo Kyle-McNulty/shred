@@ -5,5 +5,15 @@
     <string name="password_hint">Password</string>
     <string name="login_text">Login</string>
     <string name="signup_text">Sign Up</string>
+    <string name="rail">Rail</string>
+    <string name="ledge">Ledge</string>
+    <string name="stairs">Stairs</string>
+    <string name="ramp">Ramp</string>
+    <string name="gap">Gap</string>
     <string name="password_repeat">Repeat Password</string>
+    <string name="name_placeholder">Your Spot Name Here</string>
+    <string name="description_placeholder">Information about the spot here</string>
+    <string name="tags_placeholder">List of Spot Tags Here</string>
+    <string name="directions">Get directions!</string>
+
 </resources>
