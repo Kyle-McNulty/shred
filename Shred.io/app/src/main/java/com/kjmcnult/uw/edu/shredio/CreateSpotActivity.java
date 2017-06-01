@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.location.Location;
+import android.media.Rating;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -18,6 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -26,6 +28,7 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -35,6 +38,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 /**
@@ -155,8 +159,13 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
 
                 com.kjmcnult.uw.edu.shredio.LatLng location = new com.kjmcnult.uw.edu.shredio.LatLng(currentLocation.latitude, currentLocation.longitude);
 
-                Log.v(TAG, "Adding location at: " + location.toString());
-                SkateSpot spot = new SkateSpot(name, description, photoID, location, idBools);
+                // Log.v(TAG, "Adding location at: " + location.toString());
+                
+                HashMap<String, Double> map = new HashMap<String, Double>();
+                RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+                map.put(FirebaseAuth.getInstance().getCurrentUser().getEmail().replace(".", ""), (double)ratingBar.getRating());
+                SkateSpot spot = new SkateSpot(name, description, photoID, location, idBools, map);
+
 
                 //clear the edit text fields
                 nameText.setText("");
