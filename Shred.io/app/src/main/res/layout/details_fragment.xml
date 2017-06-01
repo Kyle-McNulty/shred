@@ -71,6 +71,11 @@
 
             android:padding="5dp"/>
     </LinearLayout>
+    <RatingBar
+        android:id="@+id/ratingBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
     <ImageView
         android:id="@+id/spot_image"
         android:padding="10dp"

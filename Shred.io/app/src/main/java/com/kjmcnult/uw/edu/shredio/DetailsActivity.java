@@ -12,11 +12,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,6 +33,9 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
+import static android.R.attr.name;
+import static android.R.attr.rating;
+
 /**
  * Details about a specific spot displayed when the spot is clicked on
  */
@@ -41,6 +47,7 @@ public class DetailsActivity extends AppCompatActivity{
     private String markerKey;
     private ImageView image;
     private TextView[] ids;
+    private double averageRating;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -53,6 +60,7 @@ public class DetailsActivity extends AppCompatActivity{
         markerKey = getIntent().getExtras().getString("key");
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
         // initialize the array of textviews with appropriate values
         ids = new TextView[5];
@@ -77,11 +85,26 @@ public class DetailsActivity extends AppCompatActivity{
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> skatespots = dataSnapshot.getChildren();
                 for (DataSnapshot snap : skatespots) {
-//                    Log.v(TAG, "Current Key string " + snap.getKey());
-//                    Log.v(TAG, "Expected Key string " + markerKey);
                     if (snap.getKey().equals(markerKey)) {
                         // Log.v(TAG, "Skatespot: " + snap.toString());
-                        SkateSpot skatespot = snap.getValue(SkateSpot.class);
+                        final SkateSpot skatespot = snap.getValue(SkateSpot.class);
+
+                        averageRating = skatespot.getRating();
+                        RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar);
+                        ratingBar.setRating((float)averageRating);
+
+                        // check if the user has already left a rating
+                        if(!skatespot.getUserRatings().keySet().contains(user.getEmail())){
+                            ratingBar.setOnRatingBarChangeListener(new RatingBar.OnRatingBarChangeListener() {
+                                @Override
+                                public void onRatingChanged(RatingBar ratingBar, float rating, boolean fromUser) {
+                                    HashMap<String, Double> userRatings = skatespot.getUserRatings();
+                                    userRatings.put(user.getEmail(), (double) rating);
+                                    averageRating = skatespot.getRating();
+                                    ratingBar.setRating((float) averageRating);
+                                }
+                            });
+                        }
 
                         TextView name = (TextView) findViewById(R.id.spot_name);
                         name.setText(skatespot.getName());

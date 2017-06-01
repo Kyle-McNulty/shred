@@ -34,6 +34,7 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.UUID;
 
 /**
@@ -153,7 +154,7 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
 
                 com.kjmcnult.uw.edu.shredio.LatLng location = new com.kjmcnult.uw.edu.shredio.LatLng(currentLocation.latitude, currentLocation.latitude);
 
-                SkateSpot spot = new SkateSpot(name, description, photoID, location, idBools);
+                SkateSpot spot = new SkateSpot(name, description, photoID, location, idBools, new HashMap<String, Double>());
 
                 //clear the edit text fields
                 nameText.setText("");
