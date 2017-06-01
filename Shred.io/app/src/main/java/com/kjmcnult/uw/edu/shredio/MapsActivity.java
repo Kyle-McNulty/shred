@@ -61,7 +61,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     private GoogleMap mMap;
     GoogleApiClient googleApiClient;
-    private int LOC_REQUEST_CODE = 1;
+    private static final int LOC_REQUEST_CODE = 1;
     private final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private LatLng currentLocation;
     private ArrayList<Marker> markers = new ArrayList<>();
@@ -259,6 +259,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             LocationServices.FusedLocationApi.requestLocationUpdates(googleApiClient, request, this);
         } else {
             ActivityCompat.requestPermissions(this, new String[] {android.Manifest.permission.ACCESS_FINE_LOCATION}, LOC_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch(requestCode){
+            case LOC_REQUEST_CODE: { //if asked for location
+                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    onConnected(null); //do whatever we'd do when first connecting (try again)
+                }
+            }
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         }
     }
 
