@@ -26,4 +26,8 @@ public class LatLng {
     public com.google.android.gms.maps.model.LatLng getLatLng() {
         return new com.google.android.gms.maps.model.LatLng(latitude, longitude);
     }
+
+    public String toString() {
+        return latitude + ", " + longitude;
+    }
 }

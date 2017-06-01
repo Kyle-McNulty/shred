@@ -61,6 +61,7 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     private int LOC_REQUEST_CODE = 1;
     private final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private LatLng currentLocation;
+    private ArrayList<Marker> markers = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,13 +128,14 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 Iterable<DataSnapshot> skatespots = dataSnapshot.getChildren();
                 for (DataSnapshot snap : skatespots) {
                     SkateSpot skatespot = snap.getValue(SkateSpot.class);
+                    Log.v(TAG, skatespot.getLocation().toString());
                     spotsAdapter.add(skatespot);
-                    Marker marker = mMap.addMarker(new MarkerOptions()
+                    markers.add(mMap.addMarker(new MarkerOptions()
                             .title(skatespot.getName())
                             .snippet(skatespot.getDescription())
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_shred_marker_small))
-                            .position(skatespot.getLocation().getLatLng()));
-                    marker.setTag(snap.getKey());
+                            .position(skatespot.getLocation().getLatLng())));
+                    markers.get(markers.size() - 1).setTag(snap.getKey());
                 }
             }
 
