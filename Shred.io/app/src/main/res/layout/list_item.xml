@@ -5,7 +5,10 @@
     android:layout_width="match_parent"
     android:padding="10dp"
     >
-
+    <RelativeLayout
+        android:id="@+id/list_info"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content">
     <TextView
         android:id="@+id/spotTitle"
         android:layout_width="match_parent"
@@ -34,5 +37,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"/>
+    </RelativeLayout>
+    <RatingBar
+        android:id="@+id/list_rating"
+        android:layout_alignEnd="@+id/list_info"
+        android:layout_alignRight="@+id/list_info"
+        style="?android:attr/ratingBarStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:foregroundTint="@color/customRed"
+        android:backgroundTint="@color/colorWhite"
+        android:layout_centerVertical="true" />
 </RelativeLayout>
+
 

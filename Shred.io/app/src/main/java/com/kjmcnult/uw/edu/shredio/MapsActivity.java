@@ -3,7 +3,6 @@ package com.kjmcnult.uw.edu.shredio;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,18 +15,16 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RatingBar;
 import android.widget.TextView;
 
 import com.google.android.gms.common.ConnectionResult;
@@ -49,11 +46,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.w3c.dom.Text;
-
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
 
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
@@ -305,11 +298,15 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             TextView spotDescription = (TextView) convertView.findViewById(R.id.spotDescription);
             TextView spotLocation = (TextView) convertView.findViewById(R.id.spotLocation);
             TextView spotKey = (TextView) convertView.findViewById(R.id.spotKey);
+            RatingBar ratingBar = (RatingBar) convertView.findViewById(R.id.list_rating);
             // Populate the data into the template view using the data object
             spotTitle.setText(spot.getName());
             spotDescription.setText(spot.getDescription());
             spotLocation.setText(spot.getLocation().toString());
             spotKey.setText(spot.getKey());
+            Double averageRating = spot.getRating();
+            ratingBar.setRating(Float.parseFloat(averageRating.toString()));
+
             // Return the completed view to render on screen
             return convertView;
         }
