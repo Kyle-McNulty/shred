@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout android:id="@+id/create_id" xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout android:id="@+id/create_id" xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/customBlue"
     android:padding="10dp"
+    android:baselineAligned="false"
     android:orientation="vertical">
 
     <EditText
@@ -22,24 +23,29 @@
         android:layout_height="wrap_content"
         android:textColor="@color/colorWhite"
         android:textColorHint="@color/colorWhite"
-        android:backgroundTint="@color/colorWhite"/>
+        android:backgroundTint="@color/colorWhite"
+        android:layout_below="@+id/new_spot_name"/>
 
 
     <TextView
+        android:id="@+id/tagsTitle"
         android:text="@string/select_tags"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/customRed"
         android:textColorHint="@color/colorWhite"
         android:textSize="20dp"
-        android:layout_marginTop="20dp"/>
+        android:layout_marginTop="21dp"
+        android:layout_below="@+id/new_spot_description"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true" />
 
     <LinearLayout
+        android:id="@+id/tag_buttons"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        >
+        android:layout_below="@+id/tagsTitle">
         <Button
             android:id="@+id/button1"
             android:text="@string/rail"
@@ -67,24 +73,7 @@
             android:minHeight="0dp"
             android:backgroundTint="@color/colorWhite"
             />
-        <Button
-            android:id="@+id/button4"
-            android:text="@string/gap"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:backgroundTint="@color/colorWhite"
-            />
-        <Button
-            android:id="@+id/button5"
-            android:text="@string/ramp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:minWidth="0dp"
-            android:minHeight="0dp"
-            android:backgroundTint="@color/colorWhite"
-            />
+
     </LinearLayout>
 
     <ImageView
@@ -94,12 +83,17 @@
         android:layout_gravity="center"
         android:minHeight="200dp"
         android:maxWidth="300dp"
-        android:padding="0dp"/>
+        android:padding="0dp"
+        android:layout_toEndOf="@+id/new_spot_description"
+        android:layout_alignParentTop="true" />
 
     <LinearLayout
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:gravity="center">
+        android:gravity="center"
+        android:layout_below="@+id/image_preview"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
         <ImageButton
             android:id="@+id/select_image"
             android:layout_width="wrap_content"
@@ -118,7 +112,30 @@
             />
     </LinearLayout>
 
+    <Button
+        android:id="@+id/button4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tag_buttons"
+        android:backgroundTint="@color/colorWhite"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:text="@string/gap" />
 
+    <Button
+        android:id="@+id/button5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tag_buttons"
+        android:layout_marginLeft="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_toEndOf="@+id/button4"
+        android:layout_toRightOf="@+id/button4"
+        android:backgroundTint="@color/colorWhite"
+        android:minHeight="0dp"
+        android:minWidth="0dp"
+        android:text="@string/ramp" />
 
-
-</LinearLayout>
+</RelativeLayout>
