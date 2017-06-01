@@ -158,7 +158,7 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
 
                 com.kjmcnult.uw.edu.shredio.LatLng location = new com.kjmcnult.uw.edu.shredio.LatLng(currentLocation.latitude, currentLocation.latitude);
 
-                SkateSpot spot = new SkateSpot(name, description, photoID, tags, location, idBools);
+                SkateSpot spot = new SkateSpot(name, description, photoID, location, idBools);
 
                 //clear the edit text fields
                 nameText.setText("");

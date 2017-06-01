@@ -73,6 +73,59 @@ public class DetailsActivity extends AppCompatActivity{
         final TextView tag5 = (TextView) findViewById(R.id.tag5);
         ids[4] = tag5;
 
+        DatabaseReference ref = database.getReference("Spots");
+        ref.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Iterable<DataSnapshot> skatespots = dataSnapshot.getChildren();
+                for (DataSnapshot snap : skatespots) {
+                    // Log.v(TAG, "Skatespot: " + snap.toString());
+                    SkateSpot skatespot = snap.getValue(SkateSpot.class);
+
+                    TextView name = (TextView) findViewById(R.id.spot_name);
+                    name.setText(skatespot.getName());
+
+                    TextView description = (TextView) findViewById(R.id.spot_description);
+                    description.setText(skatespot.getDescription());
+
+                    String list = hashMap.get("ids").toString();
+                    list = list.substring(1, list.length() - 1);
+                    Log.v("hahaa", list);
+                    //list.replaceAll("[0-9]" + "=", "");
+                    //Log.v("hahaa", list);
+                    List<String> myList = new ArrayList<String>(Arrays.asList(list.split(", ")));
+                    Log.v("hahaa", myList.toString());
+                    for(String item : myList){
+                        if(item.equals("false")){
+                            idBools.add(false);
+                        } else{
+                            idBools.add(true);
+                        }
+                    }
+                    Log.v("hahaa", idBools.toString());
+
+                    for(int j = 0; j < idBools.size(); j++){
+                        Log.v(TAG, idBools.get(j).toString());
+                        if((boolean)idBools.get(j)){
+                            // if the button pressed was true
+                            // then set the button to be visible
+                            ids[j].setVisibility(View.VISIBLE);
+                        }
+                    }
+
+                    //get the image from storage
+                    FirebaseStorage storage = FirebaseStorage.getInstance();
+                    StorageReference storageRef = storage.getReference();
+                    Log.v(TAG, hashMap.get("imageResource").toString());
+                    Log.v(TAG, hashMap.get("spotName").toString());
+                    storageRef = storageRef.child("spots/" + hashMap.get("spotName").toString());
+
+                    download(storageRef);
+                }
+//                Log.v(TAG, "Skatespot: " + dataSnapshot.toString());
+            }
+
+
         // iterate through the database to show appropriate information for the marker that was clicked on
         ref.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
