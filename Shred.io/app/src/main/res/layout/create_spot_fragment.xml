@@ -1,79 +1,130 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout android:id="@+id/create_id" xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/customBlue"
+    android:padding="10dp"
+    >
 
     <EditText
         android:id="@+id/new_spot_name"
         android:hint="@string/name_placeholder"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorWhite"
+        android:textColorHint="@color/colorWhite"
+        android:backgroundTint="@color/colorWhite"/>
 
     <EditText
         android:id="@+id/new_spot_description"
         android:hint="@string/description_placeholder"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorWhite"
+        android:textColorHint="@color/colorWhite"
+        android:backgroundTint="@color/colorWhite"/>
 
     <EditText
         android:id="@+id/new_spot_tags"
         android:hint="Enter Tags Here"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="@color/colorWhite"
+        android:textColorHint="@color/colorWhite"
+        android:backgroundTint="@color/colorWhite"/>
 
     <TextView
-        android:text="Select any tags that apply!"
+        android:text="Select tags"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:textColor="@color/customRed"
+        android:textColorHint="@color/colorWhite"
+        android:textSize="20dp"
+        android:layout_marginTop="20dp"/>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        >
         <Button
             android:id="@+id/button1"
             android:text="@string/rail"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:backgroundTint="@color/colorWhite"
+            />
         <Button
             android:id="@+id/button2"
             android:text="@string/stairs"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:backgroundTint="@color/colorWhite"
+            />
         <Button
             android:id="@+id/button3"
             android:text="@string/ledge"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:backgroundTint="@color/colorWhite"
+            />
         <Button
             android:id="@+id/button4"
             android:text="@string/gap"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:backgroundTint="@color/colorWhite"
+            />
         <Button
             android:id="@+id/button5"
             android:text="@string/ramp"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:minWidth="0dp"
+            android:minHeight="0dp"
+            android:backgroundTint="@color/colorWhite"
+            />
     </LinearLayout>
 
-    <Button
+    <ImageButton
         android:id="@+id/select_image"
-        android:text="Choose Image!"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_camera"
+        android:layout_marginTop="15dp"
+        android:backgroundTint="@color/colorWhite"
+        />
 
     <ImageView
         android:id="@+id/image_preview"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:minHeight="160dp"
+        android:padding="0dp"/>
 
 
     <Button
         android:id="@+id/new_spot_upload"
-        android:text="Upload"
+        android:text="Submit"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center|bottom"
+        android:backgroundTint="@color/colorWhite"
+        android:textColor="@color/customRed"
+        android:textSize="20dp"
+        android:layout_marginTop="5dp"
+        />
 
 
 
