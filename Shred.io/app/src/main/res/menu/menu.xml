@@ -15,4 +15,9 @@
         android:icon="@drawable/ic_signout_custom"
         app:showAsAction="always"
         />
+
+    <item android:id="@+id/menu_item_settings"
+        android:title="Settings"
+        app:showAsAction="never"
+        />
 </menu>

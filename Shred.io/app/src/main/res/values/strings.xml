@@ -20,5 +20,9 @@
     <string name="take_picture">Take picture!</string>
     <string name="upload">Submit</string>
     <string name="rating">Leave a rating</string>
-
+    <string name="pref_rail">Rail</string>
+    <string name="pref_stairs">Stairs</string>
+    <string name="pref_ledge">Ledge</string>
+    <string name="pref_gap">Gap</string>
+    <string name="pref_ramp">Ramp</string>
 </resources>

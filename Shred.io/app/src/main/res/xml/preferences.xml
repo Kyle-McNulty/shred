@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+        <PreferenceCategory
+            android:title="Filters">
+
+            <SwitchPreference
+                android:key="pref_rail"
+                android:title="@string/pref_rail"
+                android:defaultValue="true"
+                />
+
+            <SwitchPreference
+                android:key="pref_stairs"
+                android:title="@string/pref_stairs"
+                android:defaultValue="true"                />
+
+            <SwitchPreference
+                android:key="pref_ledge"
+                android:title="@string/pref_ledge"
+                android:defaultValue="true"
+                />
+
+            <SwitchPreference
+                android:key="pref_gap"
+                android:title="@string/pref_gap"
+                android:defaultValue="true"
+                />
+
+            <SwitchPreference
+                android:key="pref_ramp"
+                android:title="@string/pref_ramp"
+                android:defaultValue="true"
+                />
+
+        </PreferenceCategory>
+</PreferenceScreen>
