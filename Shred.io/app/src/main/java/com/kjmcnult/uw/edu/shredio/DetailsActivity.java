@@ -38,6 +38,7 @@ public class DetailsActivity extends AppCompatActivity{
 
     private static final String TAG= "DetailsActivity";
     private String markerLocation;
+    private String markerKey;
     private ImageView image;
     private TextView[] ids;
 
@@ -49,6 +50,7 @@ public class DetailsActivity extends AppCompatActivity{
         image = (ImageView) findViewById(R.id.spot_image);
 
         markerLocation = getIntent().getExtras().getString("location");
+        markerKey = getIntent().getExtras().getString("key");
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
 
@@ -75,32 +77,36 @@ public class DetailsActivity extends AppCompatActivity{
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Iterable<DataSnapshot> skatespots = dataSnapshot.getChildren();
                 for (DataSnapshot snap : skatespots) {
-                    // Log.v(TAG, "Skatespot: " + snap.toString());
-                    SkateSpot skatespot = snap.getValue(SkateSpot.class);
+//                    Log.v(TAG, "Current Key string " + snap.getKey());
+//                    Log.v(TAG, "Expected Key string " + markerKey);
+                    if (snap.getKey().equals(markerKey)) {
+                        // Log.v(TAG, "Skatespot: " + snap.toString());
+                        SkateSpot skatespot = snap.getValue(SkateSpot.class);
 
-                    TextView name = (TextView) findViewById(R.id.spot_name);
-                    name.setText(skatespot.getName());
+                        TextView name = (TextView) findViewById(R.id.spot_name);
+                        name.setText(skatespot.getName());
 
-                    TextView description = (TextView) findViewById(R.id.spot_description);
-                    description.setText(skatespot.getDescription());
+                        TextView description = (TextView) findViewById(R.id.spot_description);
+                        description.setText(skatespot.getDescription());
 
-                    ArrayList<Boolean> idBools = skatespot.getIds();
+                        ArrayList<Boolean> idBools = skatespot.getIds();
 
-                    for(int j = 0; j < idBools.size(); j++){
-                        if(idBools.get(j)){
-                            // if the button pressed was true
-                            // then set the button to be visible
-                            ids[j].setVisibility(View.VISIBLE);
+                        for (int j = 0; j < idBools.size(); j++) {
+                            if (idBools.get(j)) {
+                                // if the button pressed was true
+                                // then set the button to be visible
+                                ids[j].setVisibility(View.VISIBLE);
+                            }
                         }
+
+                        //get the image from storage
+                        FirebaseStorage storage = FirebaseStorage.getInstance();
+                        StorageReference storageRef = storage.getReference();
+                        // Log.v(TAG, skatespot.getImageResource());
+                        storageRef = storageRef.child(skatespot.getImageResource());
+
+                        download(storageRef);
                     }
-
-                    //get the image from storage
-                    FirebaseStorage storage = FirebaseStorage.getInstance();
-                    StorageReference storageRef = storage.getReference();
-                    // Log.v(TAG, skatespot.getImageResource());
-                    storageRef = storageRef.child(skatespot.getImageResource());
-
-                    download(storageRef);
                 }
 //                Log.v(TAG, "Skatespot: " + dataSnapshot.toString());
             }

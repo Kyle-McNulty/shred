@@ -99,7 +99,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 //                        .commit();
                 Intent mIntent = new Intent(MapsActivity.this, DetailsActivity.class);
                 Bundle mBundle = new Bundle();
+
+                // mBundle.putString("key", )
+
                 TextView locationView = (TextView) view.findViewById(R.id.spotLocation);
+
+                Log.v(TAG, "String of location: " + locationView.getText().toString());
+
                 String locationString = locationView.getText().toString().substring(10);
                 locationString = locationString.substring(0, locationString.length() - 1);
                 String[] locations = locationString.split(",");
@@ -122,11 +128,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 for (DataSnapshot snap : skatespots) {
                     SkateSpot skatespot = snap.getValue(SkateSpot.class);
                     spotsAdapter.add(skatespot);
-                    mMap.addMarker(new MarkerOptions()
+                    Marker marker = mMap.addMarker(new MarkerOptions()
                             .title(skatespot.getName())
                             .snippet(skatespot.getDescription())
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_shred_marker_small))
                             .position(skatespot.getLocation().getLatLng()));
+                    marker.setTag(snap.getKey());
                 }
             }
 
@@ -212,7 +219,10 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         FragmentManager fm = getSupportFragmentManager();
         Intent mIntent = new Intent(MapsActivity.this, DetailsActivity.class);
         Bundle mBundle = new Bundle();
-        mBundle.putString("location", marker.getPosition().toString());
+
+        mBundle.putString("key", marker.getTag().toString());
+
+//        mBundle.putString("location", marker.getPosition().toString());
         mIntent.putExtras(mBundle);
         Log.v(TAG, marker.getPosition().toString());
         startActivity(mIntent);
