@@ -8,13 +8,14 @@ import java.util.HashMap;
  */
 
 public class SkateSpot {
+
     private String name;
     private String description;
     private String imageResource;
     private LatLng location;
     private ArrayList<Boolean> ids;
     private HashMap<String, Double> userRatings;
-
+    private String key;
 
     public SkateSpot() {}
 
@@ -24,6 +25,7 @@ public class SkateSpot {
         this.imageResource = "spots/" + imageResource;
         this.location = location;
         this.ids = ids;
+        this.key = "";
         this.userRatings = userRatings;
     }
 
@@ -42,6 +44,12 @@ public class SkateSpot {
     public LatLng getLocation() { return location; }
 
     public ArrayList<Boolean> getIds() { return ids; }
+
+    public void setKey(String key) {
+        this.key = key;
+    }
+
+    public String getKey() { return key; }
 
     public String toString() {
         return name + ": " + description;

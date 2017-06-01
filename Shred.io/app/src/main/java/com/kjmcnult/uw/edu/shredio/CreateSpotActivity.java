@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -48,6 +49,7 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
 
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private static final int LOCATION_REQUEST_CODE = 2;
+    private static final String TAG = "CreateSpotActivity";
     private DatabaseReference myRef;
     private Bitmap bitmap;
     private LatLng currentLocation;
@@ -157,10 +159,13 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
 
                 com.kjmcnult.uw.edu.shredio.LatLng location = new com.kjmcnult.uw.edu.shredio.LatLng(currentLocation.latitude, currentLocation.longitude);
 
+                // Log.v(TAG, "Adding location at: " + location.toString());
+                
                 HashMap<String, Double> map = new HashMap<String, Double>();
                 RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar);
                 map.put(FirebaseAuth.getInstance().getCurrentUser().getEmail().replace(".", ""), (double)ratingBar.getRating());
                 SkateSpot spot = new SkateSpot(name, description, photoID, location, idBools, map);
+
 
                 //clear the edit text fields
                 nameText.setText("");
