@@ -155,7 +155,7 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
                     upload(storageRef);
                 }
 
-                com.kjmcnult.uw.edu.shredio.LatLng location = new com.kjmcnult.uw.edu.shredio.LatLng(currentLocation.latitude, currentLocation.latitude);
+                com.kjmcnult.uw.edu.shredio.LatLng location = new com.kjmcnult.uw.edu.shredio.LatLng(currentLocation.latitude, currentLocation.longitude);
 
                 HashMap<String, Double> map = new HashMap<String, Double>();
                 RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar);
