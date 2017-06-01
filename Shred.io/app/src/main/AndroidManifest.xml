@@ -73,6 +73,13 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".SettingsActivity"
+            android:label="Settings"
+            android:parentActivityName=".MapsActivity"
+            >
+        </activity>
+
     </application>
 
 </manifest>
