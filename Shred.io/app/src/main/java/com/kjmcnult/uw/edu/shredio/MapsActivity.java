@@ -60,7 +60,6 @@ import static com.kjmcnult.uw.edu.shredio.SkateSpot.getRating;
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
     private GoogleMap mMap;
-    private String TAG = "MapsActivity";
     GoogleApiClient googleApiClient;
     private int LOC_REQUEST_CODE = 1;
     private final FirebaseDatabase database = FirebaseDatabase.getInstance();
@@ -124,14 +123,12 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 for (DataSnapshot snap : skatespots) {
                     SkateSpot skatespot = snap.getValue(SkateSpot.class);
                     skatespot.setKey(snap.getKey());
-//                    Log.v(TAG, skatespot.getLocation().toString());
                     ArrayList<Boolean> filterData = skatespot.getIds();
                     ArrayList<String> spotData = new ArrayList<String>();
                     spotData.add(snap.getKey());
                     boolean filtered = false;
                     for (int i = 0; i < filterData.size(); i++) {
                         spotData.add(filterData.get(i).toString());
-                        // Log.v(TAG, "Settings: " + settingsData[i] + " vs. " + filterData.get(i));
                         if (!settingsData[i]) {
                             if (settingsData[i] != filterData.get(i)) {
                                 filtered = true;
@@ -240,7 +237,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mBundle.putString("location", locationString);
         mIntent.putExtras(mBundle);
-        // Log.v(TAG, marker.getPosition().toString());
         startActivity(mIntent);
         return true;
     }
