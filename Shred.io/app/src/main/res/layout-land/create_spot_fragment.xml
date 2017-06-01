@@ -54,7 +54,10 @@
             android:layout_height="wrap_content"
             android:minWidth="0dp"
             android:minHeight="0dp"
-            android:backgroundTint="@color/colorWhite"
+            android:background="@color/colorWhite"
+            android:textSize="20sp"
+            android:padding="5dp"
+            android:layout_margin="2dp"
             />
         <Button
             android:id="@+id/button2"
@@ -63,7 +66,10 @@
             android:layout_height="wrap_content"
             android:minWidth="0dp"
             android:minHeight="0dp"
-            android:backgroundTint="@color/colorWhite"
+            android:background="@color/colorWhite"
+            android:textSize="20sp"
+            android:padding="5dp"
+            android:layout_margin="2dp"
             />
         <Button
             android:id="@+id/button3"
@@ -72,7 +78,10 @@
             android:layout_height="wrap_content"
             android:minWidth="0dp"
             android:minHeight="0dp"
-            android:backgroundTint="@color/colorWhite"
+            android:background="@color/colorWhite"
+            android:textSize="20sp"
+            android:padding="5dp"
+            android:layout_margin="2dp"
             />
 
     </LinearLayout>
@@ -132,7 +141,10 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/tag_buttons"
-        android:backgroundTint="@color/colorWhite"
+        android:background="@color/colorWhite"
+        android:textSize="20sp"
+        android:padding="5dp"
+        android:layout_margin="2dp"
         android:minHeight="0dp"
         android:minWidth="0dp"
         android:text="@string/gap" />
@@ -146,7 +158,10 @@
         android:layout_marginStart="10dp"
         android:layout_toEndOf="@+id/button4"
         android:layout_toRightOf="@+id/button4"
-        android:backgroundTint="@color/colorWhite"
+        android:background="@color/colorWhite"
+        android:textSize="20sp"
+        android:padding="5dp"
+        android:layout_margin="2dp"
         android:minHeight="0dp"
         android:minWidth="0dp"
         android:text="@string/ramp" />

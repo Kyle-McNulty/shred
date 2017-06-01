@@ -50,6 +50,11 @@ import java.util.ArrayList;
 
 import static com.kjmcnult.uw.edu.shredio.SkateSpot.getRating;
 
+/*
+ * Activity that shows by default when logged in
+ * Shows a map of your surrounding area with skate spots as markers
+ */
+
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
     private GoogleMap mMap;
@@ -76,9 +81,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .addApi(LocationServices.API)
                 .build();
 
-        final LatLng loc = new LatLng(47.6553, 122.3035);
-
-
         // LIST STUFF
         final ArrayList<SkateSpot> spotArrayList = new ArrayList<>();
         final SpotsAdapter spotsAdapter = new SpotsAdapter(this, spotArrayList);
@@ -88,13 +90,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // PULL UP THE DETAIL FRAG
-                // pass the name, date, description, image
-                //DetailsFragment detailsFragment = DetailsFragment.newInstance(testSpot.name);
-
-//                getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.dragView, detailsFragment, "DetailsFragment")
-//                        .addToBackStack(null)
-//                        .commit();
                 Intent mIntent = new Intent(MapsActivity.this, DetailsActivity.class);
                 Bundle mBundle = new Bundle();
 
@@ -105,15 +100,9 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 Log.v(TAG, "String of location: " + locationView.getText().toString());
                 String locationString = locationView.getText().toString();
-//                String[] locations = locationString.split(",");
-//                Log.v(TAG, "spotLocation: " + Double.parseDouble(locations[0]) + ", " + locations[1]);
-//                LatLng location = new LatLng(Double.parseDouble(locations[0]), Double.parseDouble(locations[1]));
                 mBundle.putString("location", locationString);
                 mIntent.putExtras(mBundle);
-//                Log.v(TAG, location.toString());
-                //extras.putString();
                 startActivity(mIntent);
-                //startActivity(new Intent(MapsActivity.this, DetailsActivity.class));
             }
         });
 
