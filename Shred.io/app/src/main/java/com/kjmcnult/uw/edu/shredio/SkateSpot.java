@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * Created by Seung on 5/31/2017.
+ * Custom class with information about a skate spot
  */
 
 public class SkateSpot {
@@ -57,10 +57,6 @@ public class SkateSpot {
 
     public HashMap<String, Double> getUserRatings() {
         return userRatings;
-    }
-
-    public void setUserRatings(HashMap<String, Double> userRatings) {
-        this.userRatings = userRatings;
     }
 
     public static Double getRating(HashMap<String, Double> userRatings) {

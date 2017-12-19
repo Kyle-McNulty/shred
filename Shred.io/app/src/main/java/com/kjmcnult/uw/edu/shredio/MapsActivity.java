@@ -2,9 +2,11 @@ package com.kjmcnult.uw.edu.shredio;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -50,12 +52,16 @@ import java.util.ArrayList;
 
 import static com.kjmcnult.uw.edu.shredio.SkateSpot.getRating;
 
+/*
+ * Activity that shows by default when logged in
+ * Shows a map of your surrounding area with skate spots as markers
+ */
+
 public class MapsActivity extends AppCompatActivity implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener, GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener, com.google.android.gms.location.LocationListener {
 
     private GoogleMap mMap;
-    private String TAG = "MapsActivity";
     GoogleApiClient googleApiClient;
-    private int LOC_REQUEST_CODE = 1;
+    private static final int LOC_REQUEST_CODE = 1;
     private final FirebaseDatabase database = FirebaseDatabase.getInstance();
     private LatLng currentLocation;
     private ArrayList<Marker> markers = new ArrayList<>();
@@ -76,9 +82,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 .addApi(LocationServices.API)
                 .build();
 
-        final LatLng loc = new LatLng(47.6553, 122.3035);
-
-
         // LIST STUFF
         final ArrayList<SkateSpot> spotArrayList = new ArrayList<>();
         final SpotsAdapter spotsAdapter = new SpotsAdapter(this, spotArrayList);
@@ -88,13 +91,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // PULL UP THE DETAIL FRAG
-                // pass the name, date, description, image
-                //DetailsFragment detailsFragment = DetailsFragment.newInstance(testSpot.name);
-
-//                getSupportFragmentManager().beginTransaction()
-//                        .replace(R.id.dragView, detailsFragment, "DetailsFragment")
-//                        .addToBackStack(null)
-//                        .commit();
                 Intent mIntent = new Intent(MapsActivity.this, DetailsActivity.class);
                 Bundle mBundle = new Bundle();
 
@@ -103,21 +99,23 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
                 TextView locationView = (TextView) view.findViewById(R.id.spotLocation);
 
-                Log.v(TAG, "String of location: " + locationView.getText().toString());
                 String locationString = locationView.getText().toString();
-//                String[] locations = locationString.split(",");
-//                Log.v(TAG, "spotLocation: " + Double.parseDouble(locations[0]) + ", " + locations[1]);
-//                LatLng location = new LatLng(Double.parseDouble(locations[0]), Double.parseDouble(locations[1]));
                 mBundle.putString("location", locationString);
                 mIntent.putExtras(mBundle);
-//                Log.v(TAG, location.toString());
-                //extras.putString();
                 startActivity(mIntent);
-                //startActivity(new Intent(MapsActivity.this, DetailsActivity.class));
             }
         });
 
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        final boolean[] settingsData = new boolean[5];
+        settingsData[0] = sharedPref.getBoolean("pref_rail", true);
+        settingsData[1] = sharedPref.getBoolean("pref_stairs", true);
+        settingsData[2] = sharedPref.getBoolean("pref_ledge", true);
+        settingsData[3] = sharedPref.getBoolean("pref_gap", true);
+        settingsData[4] = sharedPref.getBoolean("pref_ramp", true);
+
         DatabaseReference ref = database.getReference("Spots");
+        // adds all the markers to the map from the database
         ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -125,20 +123,33 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 for (DataSnapshot snap : skatespots) {
                     SkateSpot skatespot = snap.getValue(SkateSpot.class);
                     skatespot.setKey(snap.getKey());
-                    Log.v(TAG, skatespot.getLocation().toString());
-                    spotsAdapter.add(skatespot);
-                    markers.add(mMap.addMarker(new MarkerOptions()
-                            .title(skatespot.getName())
-                            .snippet(skatespot.getDescription())
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_shred_marker_small))
-                            .position(skatespot.getLocation().getLatLng())));
-                    markers.get(markers.size() - 1).setTag(snap.getKey());
+                    ArrayList<Boolean> filterData = skatespot.getIds();
+                    ArrayList<String> spotData = new ArrayList<String>();
+                    spotData.add(snap.getKey());
+                    boolean filtered = false;
+                    for (int i = 0; i < filterData.size(); i++) {
+                        spotData.add(filterData.get(i).toString());
+                        if (!settingsData[i]) {
+                            if (settingsData[i] != filterData.get(i)) {
+                                filtered = true;
+                            }
+                        }
+                    }
+
+                    if (!filtered) {
+                        spotsAdapter.add(skatespot);
+                        markers.add(mMap.addMarker(new MarkerOptions()
+                                .title(skatespot.getName())
+                                .snippet(skatespot.getDescription())
+                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.ic_shred_marker_small))
+                                .position(skatespot.getLocation().getLatLng())));
+                        markers.get(markers.size() - 1).setTag(spotData);
+                    }
                 }
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.v(TAG, "The read failed: " + databaseError.getCode());
             }
         });
     }
@@ -181,6 +192,8 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
                 invalidateOptionsMenu();
                 Snackbar.make(findViewById(R.id.map_activity), "You just signed out!", Snackbar.LENGTH_SHORT).show();
                 return true;
+            case R.id.menu_item_settings:
+                startActivity(new Intent(MapsActivity.this, SettingsActivity.class));
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -201,8 +214,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         mMap.setOnMarkerClickListener(this);
 
-        //mMap.getUiSettings().setZoomControlsEnabled(true);
-
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -219,13 +230,13 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
         Intent mIntent = new Intent(MapsActivity.this, DetailsActivity.class);
         Bundle mBundle = new Bundle();
 
-        mBundle.putString("key", marker.getTag().toString());
+        ArrayList<String> spotData = (ArrayList<String>) marker.getTag();
+        mBundle.putString("key", spotData.get(0));
         LatLng location = marker.getPosition();
         String locationString = location.latitude + ", " + location.longitude;
 
         mBundle.putString("location", locationString);
         mIntent.putExtras(mBundle);
-        Log.v(TAG, marker.getPosition().toString());
         startActivity(mIntent);
         return true;
     }
@@ -252,6 +263,19 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        switch(requestCode){
+            case LOC_REQUEST_CODE: { //if asked for location
+                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+                    onConnected(null); //do whatever we'd do when first connecting (try again)
+                }
+            }
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
+    }
+
+    @Override
     public void onConnectionSuspended(int i) {
 
     }
@@ -263,7 +287,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
 
     @Override
     protected void onStart() {
-        Log.v(TAG, "Starting");
         invalidateOptionsMenu();
         googleApiClient.connect();
         super.onStart();
@@ -272,7 +295,6 @@ public class MapsActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     protected void onResume() {
         super.onResume();
-        Log.v(TAG, "Resuming");
         invalidateOptionsMenu();
     }
 

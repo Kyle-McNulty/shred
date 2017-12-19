@@ -52,7 +52,10 @@
             android:layout_height="wrap_content"
             android:minWidth="0dp"
             android:minHeight="0dp"
-            android:backgroundTint="@color/colorWhite"
+            android:background="@color/colorWhite"
+            android:textSize="20sp"
+            android:padding="5dp"
+            android:layout_margin="2dp"
             />
         <Button
             android:id="@+id/button2"
@@ -61,7 +64,10 @@
             android:layout_height="wrap_content"
             android:minWidth="0dp"
             android:minHeight="0dp"
-            android:backgroundTint="@color/colorWhite"
+            android:background="@color/colorWhite"
+            android:textSize="20sp"
+            android:padding="5dp"
+            android:layout_margin="2dp"
             />
         <Button
             android:id="@+id/button3"
@@ -70,7 +76,10 @@
             android:layout_height="wrap_content"
             android:minWidth="0dp"
             android:minHeight="0dp"
-            android:backgroundTint="@color/colorWhite"
+            android:background="@color/colorWhite"
+            android:textSize="20sp"
+            android:padding="5dp"
+            android:layout_margin="2dp"
             />
         <Button
             android:id="@+id/button4"
@@ -79,7 +88,10 @@
             android:layout_height="wrap_content"
             android:minWidth="0dp"
             android:minHeight="0dp"
-            android:backgroundTint="@color/colorWhite"
+            android:background="@color/colorWhite"
+            android:textSize="20sp"
+            android:padding="5dp"
+            android:layout_margin="2dp"
             />
         <Button
             android:id="@+id/button5"
@@ -88,7 +100,10 @@
             android:layout_height="wrap_content"
             android:minWidth="0dp"
             android:minHeight="0dp"
-            android:backgroundTint="@color/colorWhite"
+            android:background="@color/colorWhite"
+            android:textSize="20sp"
+            android:padding="5dp"
+            android:layout_margin="2dp"
             />
     </LinearLayout>
 

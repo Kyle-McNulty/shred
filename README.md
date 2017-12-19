@@ -1,3 +1,6 @@
+![](https://github.com/Kyle-McNulty/shred/blob/master/Shred.io/app/src/main/res/drawable/logo_new.png)
+
+
 # shred.io
 Final Project for Info448, skateboarding spot finder
 
@@ -21,5 +24,8 @@ After browsing to a specific spot, you can read the description posted by the ow
 To create a spot, click the red button in the lower right corner of the maps view. This will prompt you for information about the spot such as a description, picture, etc.
 
 
+As a user you have the ability to rate spots, this is an important feature for curating content.
 
 If you have any issues, please feel free to file an issue right here through Github!
+
+![](https://github.com/Kyle-McNulty/shred/blob/master/Shred.io/app/src/main/res/drawable/skateboarder.png)

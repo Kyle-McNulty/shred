@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.location.Location;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.ColorRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -156,8 +157,6 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
 
                 com.kjmcnult.uw.edu.shredio.LatLng location = new com.kjmcnult.uw.edu.shredio.LatLng(currentLocation.latitude, currentLocation.longitude);
 
-                // Log.v(TAG, "Adding location at: " + location.toString());
-
                 HashMap<String, Double> map = new HashMap<String, Double>();
                 RatingBar ratingBar = (RatingBar) findViewById(R.id.ratingBar);
                 map.put(FirebaseAuth.getInstance().getCurrentUser().getEmail().replace(".", ""), (double)ratingBar.getRating());
@@ -167,8 +166,6 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
                 //clear the edit text fields
                 nameText.setText("");
                 descriptionText.setText("");
-
-                //child(spot.spotName).
 
                 myRef.child("Spots").push().setValue(spot);
 
@@ -207,7 +204,6 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, and download URL.
             }
         });
     }
@@ -255,10 +251,10 @@ public class CreateSpotActivity extends AppCompatActivity implements com.google.
                 //set the boolean for the specific id to opposite
                 if(idBools.get(id)){
                     //if button has already been pressed, chane background color back to normal
-                    v.setBackgroundColor(Color.GRAY);
+                    v.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.colorWhite));
                 } else {
-                    //change color to show selected
-                    v.setBackgroundColor(Color.YELLOW);
+                    //change color to indicate the button has been selected
+                    v.setBackgroundColor(getApplicationContext().getResources().getColor(R.color.customRed));
                 }
                 idBools.set(id, !idBools.get(id));
             }
